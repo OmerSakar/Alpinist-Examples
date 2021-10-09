@@ -1,0 +1,52 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases KernelFusionDifferentPatts
+//:: tools silicon
+//:: verdict Pass
+
+class KernelFusionOrig6 {
+  
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere c != null;
+  context_everywhere a.length == b.length;
+  context_everywhere a.length == c.length;
+  context_everywhere a.length == 2048;
+  context_everywhere b.length == 2048;
+  context_everywhere c.length == 2048;
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 \ 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( c [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( c [ i ] , 1 \ 1 ));
+  void Kernel_Fusion_Orig(int[] a,int[] b,int[] c) {
+    gpuopt fuse 2 1;
+    par kernel1(int tid = 0 .. a.length)
+      requires Perm( a [ tid ] , 5 \ 6 );
+      requires Perm( b [ tid ] , 1 \ 1 );
+      ensures Perm( a [ tid ] , 5 \ 6 );
+      ensures Perm( b [ tid ] , 1 \ 1 );
+      ensures b [ tid ] == a [ tid ];
+      {
+        b [ tid ] = a [ tid ];
+      }
+    par kernel2(int tid = 0 .. a.length)
+      requires Perm( c [ tid ] , 1 \ 1 );
+      requires (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 3 ));
+      requires (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 3 ));
+      ensures Perm( c [ tid ] , 1 \ 1 );
+      ensures (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 3 ));
+      ensures (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 3 ));
+      ensures (tid != a.length - 1 ==> c [ tid ] == a [ (tid + 1) ]);
+      ensures (tid == a.length - 1 ==> c [ tid ] == a [ 0 ]);
+      {
+        if (tid != a.length - 1) {
+          c [ tid ] = a [ (tid + 1) ];
+        } else {
+          c [ tid ] = a [ 0 ];
+        }
+      }
+  }
+  
+}
+

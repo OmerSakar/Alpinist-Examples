@@ -1,0 +1,54 @@
+class Ref {
+  
+  static pure int vct_tile_newIdx(int a,int b,int c) = a + b * c;
+  
+  requires b > 0;
+  static pure int vct_tile_ceiling(int a,int b) = a % b == 0 ? a / b : a / b + 1;
+  
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere c != null;
+  context_everywhere tcount >= 0;
+  context_everywhere tcount >= 100;
+  context_everywhere a.length == tcount;
+  context_everywhere b.length == tcount;
+  context_everywhere c.length == tcount;
+  requires (\forall* int i_0;0 <= i_0 && i_0 < 10;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;Perm( a [ vct_tile_newIdx(i_0,i_1,10) ] , write )));
+  requires (\forall* int i_0;0 <= i_0 && i_0 < 10;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;Perm( b [ vct_tile_newIdx(i_0,i_1,10) ] , read )));
+  requires (\forall* int i_0;0 <= i_0 && i_0 < 10;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;Perm( c [ vct_tile_newIdx(i_0,i_1,10) ] , read )));
+  ensures (\forall* int i_0;0 <= i_0 && i_0 < 10;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;Perm( a [ vct_tile_newIdx(i_0,i_1,10) ] , write )));
+  ensures (\forall* int i_0;0 <= i_0 && i_0 < 10;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;Perm( b [ vct_tile_newIdx(i_0,i_1,10) ] , read )));
+  ensures (\forall* int i_0;0 <= i_0 && i_0 < 10;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;Perm( c [ vct_tile_newIdx(i_0,i_1,10) ] , read )));
+  ensures (\forall int i_0;0 <= i_0 && i_0 < 10;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;b [ vct_tile_newIdx(i_0,i_1,10) ] == \old( b [ vct_tile_newIdx(i_0,i_1,10) ] )));
+  ensures (\forall int i_0;0 <= i_0 && i_0 < 10;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;c [ vct_tile_newIdx(i_0,i_1,10) ] == \old( c [ vct_tile_newIdx(i_0,i_1,10) ] )));
+  ensures (\forall int i_0;0 <= i_0 && i_0 < 10;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(i_0,i_1,10) < tcount;a [ vct_tile_newIdx(i_0,i_1,10) ] == b [ vct_tile_newIdx(i_0,i_1,10) ] + c [ vct_tile_newIdx(i_0,i_1,10) ]));
+  void main(int tcount,int[] a,int[] b,int[] c){
+    par (int tid = 0 .. 10)
+      requires (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( a [ vct_tile_newIdx(tid,vct_i,10) ] , write ));
+      requires (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( b [ vct_tile_newIdx(tid,vct_i,10) ] , read ));
+      requires (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( c [ vct_tile_newIdx(tid,vct_i,10) ] , read ));
+      ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( a [ vct_tile_newIdx(tid,vct_i,10) ] , write ));
+      ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( b [ vct_tile_newIdx(tid,vct_i,10) ] , read ));
+      ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( c [ vct_tile_newIdx(tid,vct_i,10) ] , read ));
+      ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);b [ vct_tile_newIdx(tid,vct_i,10) ] == \old( b [ vct_tile_newIdx(tid,vct_i,10) ] ));
+      ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);c [ vct_tile_newIdx(tid,vct_i,10) ] == \old( c [ vct_tile_newIdx(tid,vct_i,10) ] ));
+      ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);a [ vct_tile_newIdx(tid,vct_i,10) ] == b [ vct_tile_newIdx(tid,vct_i,10) ] + c [ vct_tile_newIdx(tid,vct_i,10) ]);
+      {
+        loop_invariant vct_tile_counter >= 0;
+        loop_invariant vct_tile_counter <= vct_tile_ceiling(tcount,10);
+        loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( a [ vct_tile_newIdx(tid,vct_i,10) ] , write ));
+        loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( b [ vct_tile_newIdx(tid,vct_i,10) ] , read ));
+        loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);Perm( c [ vct_tile_newIdx(tid,vct_i,10) ] , read ));
+        loop_invariant (\forall* int vct_i;vct_i >= vct_tile_counter && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);\old( b [ vct_tile_newIdx(tid,vct_i,10) ] ) == b [ vct_tile_newIdx(tid,vct_i,10) ]);
+        loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_counter && vct_tile_newIdx(tid,vct_i,10) < tcount);b [ vct_tile_newIdx(tid,vct_i,10) ] == \old( b [ vct_tile_newIdx(tid,vct_i,10) ] ));
+        loop_invariant (\forall* int vct_i;vct_i >= vct_tile_counter && (vct_i < vct_tile_ceiling(tcount,10) && vct_tile_newIdx(tid,vct_i,10) < tcount);\old( c [ vct_tile_newIdx(tid,vct_i,10) ] ) == c [ vct_tile_newIdx(tid,vct_i,10) ]);
+        loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_counter && vct_tile_newIdx(tid,vct_i,10) < tcount);c [ vct_tile_newIdx(tid,vct_i,10) ] == \old( c [ vct_tile_newIdx(tid,vct_i,10) ] ));
+        loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_counter && vct_tile_newIdx(tid,vct_i,10) < tcount);a [ vct_tile_newIdx(tid,vct_i,10) ] == b [ vct_tile_newIdx(tid,vct_i,10) ] + c [ vct_tile_newIdx(tid,vct_i,10) ]);
+        for(int vct_tile_counter = 0;tid + vct_tile_counter * 10 < tcount;vct_tile_counter = vct_tile_counter + 1){
+          a [ vct_tile_newIdx(tid,vct_tile_counter,10) ] = b [ vct_tile_newIdx(tid,vct_tile_counter,10) ] + c [ vct_tile_newIdx(tid,vct_tile_counter,10) ];
+        }
+      }
+  }
+  
+}
+

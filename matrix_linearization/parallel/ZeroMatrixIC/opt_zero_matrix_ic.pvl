@@ -1,0 +1,30 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_ZeroMultiple-IC
+//:: tools silicon
+//:: verdict Pass
+
+
+class ZeroMatrixIC {
+  
+  static pure int vct_ml_Idx(int vct_ml_X,int vct_ml_a,int vct_ml_b) = vct_ml_X * vct_ml_a + vct_ml_b;
+  
+  context_everywhere matrix != null;
+  context_everywhere M > 0;
+  context_everywhere N > 0;
+  context_everywhere matrix.length == M * N;
+  requires (\forall* int i1;0 <= i1 && i1 < M;(\forall* int j1;0 <= j1 && j1 < N;Perm( matrix [ vct_ml_Idx(M,j1,i1) ] , write )));
+  ensures (\forall* int i1;0 <= i1 && i1 < M;(\forall* int j1;0 <= j1 && j1 < N;Perm( matrix [ vct_ml_Idx(M,j1,i1) ] , write )));
+  ensures (\forall int i3;0 <= i3 && i3 < M;(\forall int j3;0 <= j3 && j3 < N;matrix [ vct_ml_Idx(M,j3,i3) ] == 0));
+  void matrix(int M,int N,int[] matrix){
+    par
+      twodim(int i = 0 .. M,int j = 0 .. N)
+      requires Perm( matrix [ vct_ml_Idx(M,j,i) ] , write );
+      ensures Perm( matrix [ vct_ml_Idx(M,j,i) ] , write );
+      ensures matrix [ vct_ml_Idx(M,j,i) ] == 0;
+      {
+        matrix [ vct_ml_Idx(M,j,i) ] = 0;
+      }
+  }
+  
+}
+

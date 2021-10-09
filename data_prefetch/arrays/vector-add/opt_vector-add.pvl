@@ -1,0 +1,43 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_vector-add
+//:: tools silicon
+//:: verdict Pass
+class Ref {
+  
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere c != null;
+  context_everywhere tcount >= 0;
+  context_everywhere (a.length == tcount && b.length == tcount && c.length == tcount);
+  requires (\forall* int i;0 <= i && i < tcount;Perm( a [ i ] , write ));
+  requires (\forall* int i;0 <= i && i < tcount;Perm( b [ i ] , read ));
+  requires (\forall* int i;0 <= i && i < tcount;Perm( c [ i ] , read ));
+  ensures (\forall* int i;0 <= i && i < tcount;Perm( a [ i ] , write ));
+  ensures (\forall* int i;0 <= i && i < tcount;Perm( b [ i ] , read ));
+  ensures (\forall* int i;0 <= i && i < tcount;Perm( c [ i ] , read ));
+  ensures (\forall int i;0 <= i && i < tcount;b [ i ] == \old( b [ i ] ));
+  ensures (\forall int i;0 <= i && i < tcount;c [ i ] == \old( c [ i ] ));
+  ensures (\forall int i;0 <= i && i < tcount;a [ i ] == b [ i ] + c [ i ]);
+  void main(int tcount,int[] a,int[] b,int[] c){
+    par
+      (int tid = 0 .. tcount)
+      requires Perm( a [ tid ] , write );
+      requires Perm( b [ tid ] , read );
+      requires Perm( c [ tid ] , read );
+      ensures Perm( a [ tid ] , write );
+      ensures Perm( b [ tid ] , read );
+      ensures Perm( c [ tid ] , read );
+      ensures b [ tid ] == \old( b [ tid ] );
+      ensures c [ tid ] == \old( c [ tid ] );
+      ensures a [ tid ] == b [ tid ] + c [ tid ];
+      {
+        int c_reg_2 = c [ tid ];
+        int a_reg_0 = a [ tid ];
+        int b_reg_1 = b [ tid ];
+        a_reg_0 = b_reg_1 + c_reg_2;
+        a [ tid ] = a_reg_0;
+      }
+  }
+  
+}
+

@@ -1,0 +1,63 @@
+class Worker {
+  boolean terminated;
+  int value;
+}
+
+class Test {
+  seq<int> values;
+  
+  static pure int vct_tile_newIdx(int a,int b,int c) = a + b * c;
+  
+  requires b > 0;
+  static pure int vct_tile_ceiling(int a,int b) = a % b == 0 ? a / b : a / b + 1;
+  
+  given seq<Worker> workers;
+  context_everywhere 0 < N;
+  context_everywhere (| workers |) == N;
+  context_everywhere N == 2048;
+  requires (\forall int i_0;0 <= i_0 && i_0 < 500;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;workers [ vct_tile_newIdx(i_0,i_1,500) ] != null));
+  requires (\forall* int i_0;0 <= i_0 && i_0 < 500;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;Perm( workers [ vct_tile_newIdx(i_0,i_1,500) ].terminated , write ) ** Perm( workers [ vct_tile_newIdx(i_0,i_1,500) ].value , write )));
+  requires Perm( values , write );
+  requires (| values |) == N;
+  requires (\forall int i_0;0 <= i_0 && i_0 < 500;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;! workers [ vct_tile_newIdx(i_0,i_1,500) ].terminated));
+  ensures (\forall int i_0;0 <= i_0 && i_0 < 500;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;workers [ vct_tile_newIdx(i_0,i_1,500) ] != null));
+  ensures (\forall* int i_0;0 <= i_0 && i_0 < 500;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;Perm( workers [ vct_tile_newIdx(i_0,i_1,500) ].terminated , write ) ** Perm( workers [ vct_tile_newIdx(i_0,i_1,500) ].value , write )));
+  ensures Perm( values , write );
+  ensures (| values |) == N;
+  ensures (\forall int i_0;0 <= i_0 && i_0 < 500;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;workers [ vct_tile_newIdx(i_0,i_1,500) ].terminated));
+  ensures (\forall int i_0;0 <= i_0 && i_0 < 500;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;values [ vct_tile_newIdx(i_0,i_1,500) ] == 0));
+  void reset(int N){
+    invariant inv (true ** 0 < N ** (| workers |) == N ** Perm( values , write ) ** (| values |) == N ** (\forall int i_0;0 <= i_0 && i_0 < 500;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;workers [ vct_tile_newIdx(i_0,i_1,500) ] != null)) ** (\forall* int i_0;0 <= i_0 && i_0 < 500;(\forall* int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;Perm( workers [ vct_tile_newIdx(i_0,i_1,500) ].terminated , 1 \ 2 ) ** Perm( workers [ vct_tile_newIdx(i_0,i_1,500) ].value , 1 \ 2 ))) ** (\forall int i_0;0 <= i_0 && i_0 < 500;(\forall int i_1;i_1 >= 0 && i_1 < vct_tile_ceiling(N,500) && vct_tile_newIdx(i_0,i_1,500) < N;workers [ vct_tile_newIdx(i_0,i_1,500) ].terminated ==> values [ vct_tile_newIdx(i_0,i_1,500) ] == workers [ vct_tile_newIdx(i_0,i_1,500) ].value))){
+      par (int tid = 0 .. 500)
+        requires 0 < N;
+        requires (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);Perm( workers [ vct_tile_newIdx(tid,vct_i,500) ].terminated , 1 \ 2 ));
+        requires (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);Perm( workers [ vct_tile_newIdx(tid,vct_i,500) ].value , 1 \ 2 ));
+        requires (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);! workers [ vct_tile_newIdx(tid,vct_i,500) ].terminated);
+        ensures 0 < N;
+        ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);Perm( workers [ vct_tile_newIdx(tid,vct_i,500) ].terminated , 1 \ 2 ));
+        ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);Perm( workers [ vct_tile_newIdx(tid,vct_i,500) ].value , 1 \ 2 ));
+        ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);workers [ vct_tile_newIdx(tid,vct_i,500) ].terminated);
+        ensures (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);workers [ vct_tile_newIdx(tid,vct_i,500) ].value == 0);
+        {
+          loop_invariant vct_tile_counter >= 0;
+          loop_invariant vct_tile_counter <= vct_tile_ceiling(N,500);
+          loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);Perm( workers [ vct_tile_newIdx(tid,vct_i,500) ].terminated , 1 \ 2 ));
+          loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);Perm( workers [ vct_tile_newIdx(tid,vct_i,500) ].value , 1 \ 2 ));
+          loop_invariant (\forall* int vct_i;vct_i >= vct_tile_counter && (vct_i < vct_tile_ceiling(N,500) && vct_tile_newIdx(tid,vct_i,500) < N);! workers [ vct_tile_newIdx(tid,vct_i,500) ].terminated);
+          loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_counter && vct_tile_newIdx(tid,vct_i,500) < N);workers [ vct_tile_newIdx(tid,vct_i,500) ].terminated);
+          loop_invariant (\forall* int vct_i;vct_i >= 0 && (vct_i < vct_tile_counter && vct_tile_newIdx(tid,vct_i,500) < N);workers [ vct_tile_newIdx(tid,vct_i,500) ].value == 0);
+          for(int vct_tile_counter = 0;tid + vct_tile_counter * 500 < N;vct_tile_counter = vct_tile_counter + 1){
+            atomic (inv){
+              {
+                values = values [ vct_tile_newIdx(tid,vct_tile_counter,500) -> 0 ];
+                workers [ vct_tile_newIdx(tid,vct_tile_counter,500) ].value = 0;
+                workers [ vct_tile_newIdx(tid,vct_tile_counter,500) ].terminated = true;
+              }
+            }
+          }
+        }
+    }
+  }
+  
+}
+

@@ -1,0 +1,147 @@
+// -*- tab-width:4 ; indent-tabs-mode:nil -*-
+//:: cases TicTacToeMatrix
+//:: tools silicon
+//:: verdict Pass
+
+class Move {
+  int i;
+  int j;
+  int token;
+  
+  ensures Perm( i , read );
+  ensures Perm( j , read );
+  ensures Perm( token , read );
+  ensures i == mi;
+  ensures j == mj;
+  ensures token == mt;
+  Move(int mi,int mj,int mt){
+    i = mi;
+    j = mj;
+    token = mt;
+  }
+  
+}
+
+class Grid {
+  int myToken;
+  Move move;
+  boolean turn;
+  
+  //ignoring contract of predicate
+    inline resource gridWritePerm(int[][] grid) = grid != null ** (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , write )));
+  
+  requires tok == 0 || tok == 1;
+  ensures Perm( myToken , read );
+  ensures Perm( move , 1 );
+  ensures myToken == tok;
+  ensures (myToken == 0 || myToken == 1);
+  ensures Perm( turn , 1 );
+  ensures turn == t;
+  Grid(int tok,boolean t){
+    int[][] grid = new int[3][3];
+    loop_invariant grid != null;
+    loop_invariant (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , write )));
+    loop_invariant 0 <= i;
+    loop_invariant i <= 3;
+    loop_invariant (\forall int k;0 <= k && k < i;(\forall int l;0 <= l && l < 3;(grid [ k ]) [ l ] == - 1));
+    for(int i = 0;i < 3;i ++){
+      loop_invariant grid != null;
+      loop_invariant (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , write )));
+      loop_invariant 0 <= j;
+      loop_invariant j <= 3;
+      loop_invariant (\forall int k;0 <= k && k < i;(\forall int l;0 <= l && l < 3;(grid [ k ]) [ l ] == - 1));
+      loop_invariant (\forall int l;0 <= l && l < j;(grid [ i ]) [ l ] == - 1);
+      for(int j = 0;j < 3;j ++){
+        (grid [ i ]) [ j ] = - 1;
+      }
+    }
+    myToken = tok;
+    turn = t;
+  }
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires Perm( move , 1 \ 2 );
+  requires Perm( move.i , read );
+  requires Perm( move.j , read );
+  requires Perm( move.token , read );
+  requires grid != null;
+  requires (0 <= move.i && move.i <= 2);
+  requires (0 <= move.j && move.j <= 2);
+  requires Perm( (grid [ move.i ]) [ move.j ] , 1 );
+  requires (move.token == 0 || move.token == 1);
+  requires readMoveCell(grid) == - 1;
+  ensures Perm( move , 1 \ 2 );
+  ensures Perm( move.i , read );
+  ensures Perm( move.j , read );
+  ensures Perm( move.token , read );
+  ensures grid != null;
+  ensures (0 <= move.i && move.i <= 2);
+  ensures (0 <= move.j && move.j <= 2);
+  ensures Perm( (grid [ move.i ]) [ move.j ] , 1 );
+  ensures readMoveCell(grid) == move.token;
+  void doMove(int[][] grid){
+    (grid [ move.i ]) [ move.j ] = move.token;
+  }
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires Perm( move , 1 \ 2 );
+  requires Perm( move.i , read );
+  requires Perm( move.j , read );
+  requires (0 <= move.i && move.i <= 2);
+  requires (0 <= move.j && move.j <= 2);
+  requires grid != null;
+  requires Perm( (grid [ move.i ]) [ move.j ] , 1 \ 2 );
+  pure int readMoveCell(int[][] grid) = (grid [ move.i ]) [ move.j ];
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires grid != null;
+  requires (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , 1 \ 2 )));
+  pure boolean gameFinished(int[][] grid){
+    return gridFull(grid) || gridWin(grid);
+  }
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires grid != null;
+  requires (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , 1 \ 2 )));
+  pure boolean gridWinDiagonal(int[][] grid) = ((grid [ 0 ]) [ 0 ] != - 1 && (grid [ 0 ]) [ 0 ] == (grid [ 1 ]) [ 1 ] && (grid [ 1 ]) [ 1 ] == (grid [ 2 ]) [ 2 ] || (grid [ 0 ]) [ 2 ] != - 1) && (grid [ 0 ]) [ 2 ] == (grid [ 1 ]) [ 1 ] && (grid [ 1 ]) [ 1 ] == (grid [ 2 ]) [ 0 ];
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires grid != null;
+  requires (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , 1 \ 2 )));
+  requires (0 <= row && row < 3);
+  pure boolean gridWinRow(int[][] grid,int row) = ((grid [ row ]) [ 0 ] != - 1 && (grid [ row ]) [ 0 ] == (grid [ row ]) [ 1 ] && (grid [ row ]) [ 1 ] == (grid [ row ]) [ 2 ] || (grid [ 0 ]) [ row ] != - 1) && (grid [ 0 ]) [ row ] == (grid [ 1 ]) [ row ] && (grid [ 1 ]) [ row ] == (grid [ 2 ]) [ row ];
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires grid != null;
+  requires (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , 1 \ 2 )));
+  pure boolean gridWin(int[][] grid) = gridWinRow(grid,0) || gridWinRow(grid,1) || gridWinRow(grid,2) || gridWinDiagonal(grid);
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires grid != null;
+  requires (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , 1 \ 2 )));
+  pure boolean gridFull(int[][] grid) = (\forall int i;0 <= i && i < 3;(\forall int j;0 <= j && j < 3;(grid [ i ]) [ j ] != - 1));
+  
+  gpuopt matrix_lin grid C 3 3;
+  requires Perm( move , 1 );
+  requires Perm( myToken , read );
+  requires grid != null;
+  requires (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , 1 \ 2 )));
+  requires (myToken == 0 || myToken == 1);
+  requires ! gridFull(grid);
+  ensures Perm( move , 1 );
+  ensures Perm( myToken , read );
+  ensures grid != null;
+  ensures (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , 1 \ 2 )));
+  ensures Perm( move.i , read );
+  ensures Perm( move.j , read );
+  ensures Perm( move.token , read );
+  ensures (0 <= move.i && move.i <= 2);
+  ensures (0 <= move.j && move.j <= 2);
+  ensures move.token == myToken;
+  ensures (move.token == 0 || move.token == 1);
+  ensures myToken == \old( myToken );
+  ensures readMoveCell(grid) == - 1;
+  void createNewMove(int[][] grid);
+  
+}
+

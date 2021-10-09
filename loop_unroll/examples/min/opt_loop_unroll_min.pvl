@@ -1,0 +1,52 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: case opt_LoopUnrollingMin
+//:: tools silicon
+//:: verdict Pass
+
+class LoopUnrollingMin {
+  int[] ar;
+  
+  requires Perm( ar , 1 \ 2 );
+  requires ar != null;
+  requires ar.length > 2;
+  requires (\forall* int i;0 <= i && i < ar.length;Perm( ar [ i ] , write ));
+  ensures Perm( ar , 1 \ 2 );
+  ensures ar != null;
+  ensures ar.length > 2;
+  ensures (\forall* int i;0 <= i && i < ar.length;Perm( ar [ i ] , write ));
+  ensures (\forall int i;0 <= i && i < ar.length;ar [ i ] == 0);
+  void zero(){
+    int i = ar.length - 1;
+    assert Perm( ar , 1 \ 2 );
+    assert ar != null;
+    assert ar.length > 2;
+    assert - 1 <= i;
+    assert i <= ar.length - 1;
+    assert (\forall* int j;0 <= j && j < ar.length;Perm( ar [ j ] , write ));
+    assert (\forall int j;i < j && j < ar.length;ar [ j ] == 0);
+    ar [ i ] = 0;
+    i = i - 1;
+    assert Perm( ar , 1 \ 2 );
+    assert ar != null;
+    assert ar.length > 2;
+    assert - 1 <= i;
+    assert i <= ar.length - 1;
+    assert (\forall* int j;0 <= j && j < ar.length;Perm( ar [ j ] , write ));
+    assert (\forall int j;i < j && j < ar.length;ar [ j ] == 0);
+    ar [ i ] = 0;
+    i = i - 1;
+    loop_invariant Perm( ar , 1 \ 2 );
+    loop_invariant ar != null;
+    loop_invariant ar.length > 2;
+    loop_invariant - 1 <= i;
+    loop_invariant i <= ar.length - 1 - 2;
+    loop_invariant (\forall* int j;0 <= j && j < ar.length;Perm( ar [ j ] , write ));
+    loop_invariant (\forall int j;i < j && j < ar.length;ar [ j ] == 0);
+    while(i >= 0){
+      ar [ i ] = 0;
+      i = i - 1;
+    }
+  }
+  
+}
+

@@ -1,0 +1,54 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_RegisterOrig2
+//:: tools silicon
+//:: verdict Pass
+
+class RegisterOrig2 {
+  
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere a.length == b.length;
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 ));
+  ensures (\forall int i;i >= 0 && i < a.length;i != a.length - 1 ==> a [ i ] == \old( 2 * (a [ (i + 1) ] + 1) ));
+  ensures (\forall int i;i >= 0 && i < a.length;i == a.length - 1 ==> a [ i ] == \old( 2 * (a [ 0 ] + 1) ));
+  void Register_Orig(int[] a,int[] b){
+    par
+      One_kernel(int tid = 0 .. a.length)
+      requires (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 2 ));
+      requires (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+      requires Perm( b [ tid ] , 1 );
+      ensures Perm( b [ tid ] , 1 );
+      ensures Perm( a [ tid ] , 1 );
+      ensures a [ tid ] == b [ tid ];
+      {
+        int b_reg_1 = b [ tid ];
+        if (tid != a.length - 1) {
+          b_reg_1 = a [ (tid + 1) ];
+        } else {
+          b_reg_1 = a [ 0 ];
+        }
+        b_reg_1 = b_reg_1 + 1;
+        b [ tid ] = b_reg_1;
+        barrier(One_kernel) { 
+          requires (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 2 ));
+          requires (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+          requires Perm( b [ tid ] , 1 );
+          ensures Perm( b [ tid ] , 1 );
+          ensures Perm( a [ tid ] , 1 );
+        }
+        int a_reg_0 = a [ tid ];
+        int b_reg_1 = b [ tid ];
+        b_reg_1 = 2 * b_reg_1;
+        a_reg_0 = b_reg_1;
+        a [ tid ] = a_reg_0;
+        b [ tid ] = b_reg_1;
+      }
+    assert (\forall int i;i >= 0 && i < a.length;i != a.length - 1 ==> a [ i ] == \old( 2 * (a [ (i + 1) ] + 1) ));
+    assert (\forall int i;i >= 0 && i < a.length;i == a.length - 1 ==> a [ i ] == \old( 2 * (a [ 0 ] + 1) ));
+  }
+  
+}
+

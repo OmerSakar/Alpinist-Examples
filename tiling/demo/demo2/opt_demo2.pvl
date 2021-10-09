@@ -1,0 +1,48 @@
+class Clear {
+  
+  context_everywhere A != null;
+  context_everywhere (\forall* int j;0 <= j && j < A.length;Perm( A [ j ] , write ));
+  ensures (\forall int j;0 <= j && j < A.length;A [ j ] == 0);
+  void clear(int[] A){
+    int i = 0;
+    loop_invariant 0 <= i;
+    loop_invariant i <= A.length;
+    loop_invariant (\forall int j;0 <= j && j < i;A [ j ] == 0);
+    while(i < A.length){
+      A [ i ] = 0;
+      i = i + 1;
+    }
+  }
+  
+  static pure int vct_tile_low(int a,int b) = a * b;
+  
+  static pure int vct_tile_upp(int a,int b) = (a + 1) * b;
+  
+  requires b > 0;
+  static pure int vct_tile_ceiling(int a,int b) = a % b == 0 ? a / b : a / b + 1;
+  
+  context_everywhere A != null;
+  context_everywhere A.length == 1024;
+  requires (\forall* int i_0;0 <= i_0 && i_0 < vct_tile_ceiling(A.length,8);(\forall* int j_1;j_1 >= vct_tile_low(i_0,8) && j_1 < vct_tile_upp(i_0,8) && j_1 < A.length;Perm( A [ j_1 ] , write )));
+  ensures (\forall* int i_0;0 <= i_0 && i_0 < vct_tile_ceiling(A.length,8);(\forall* int j_1;j_1 >= vct_tile_low(i_0,8) && j_1 < vct_tile_upp(i_0,8) && j_1 < A.length;Perm( A [ j_1 ] , write )));
+  ensures (\forall int i_0;0 <= i_0 && i_0 < vct_tile_ceiling(A.length,8);(\forall int j_1;j_1 >= vct_tile_low(i_0,8) && j_1 < vct_tile_upp(i_0,8) && j_1 < A.length;A [ j_1 ] == 0));
+  void clearPar(int[] A){
+    par (int tid = 0 .. vct_tile_ceiling(A.length,8))
+      requires (\forall* int vct_i;vct_i >= vct_tile_low(tid,8) && (vct_i < vct_tile_upp(tid,8) && (vct_i < vct_tile_upp(tid,8) && vct_i < A.length));Perm( A [ vct_i ] , write ));
+      ensures (\forall* int vct_i;vct_i >= vct_tile_low(tid,8) && (vct_i < vct_tile_upp(tid,8) && (vct_i < vct_tile_upp(tid,8) && vct_i < A.length));Perm( A [ vct_i ] , write ));
+      ensures (\forall* int vct_i;vct_i >= vct_tile_low(tid,8) && (vct_i < vct_tile_upp(tid,8) && (vct_i < vct_tile_upp(tid,8) && vct_i < A.length));A [ vct_i ] == 0);
+      {
+        assert tid <= A.length / 8;
+        loop_invariant vct_tile_counter >= vct_tile_low(tid,8);
+        loop_invariant vct_tile_counter <= vct_tile_upp(tid,8);
+        loop_invariant vct_tile_counter <= A.length;
+        loop_invariant (\forall* int vct_i;vct_i >= vct_tile_low(tid,8) && (vct_i < vct_tile_upp(tid,8) && (vct_i < vct_tile_upp(tid,8) && vct_i < A.length));Perm( A [ vct_i ] , write ));
+        loop_invariant (\forall* int vct_i;vct_i >= vct_tile_low(tid,8) && (vct_i < vct_tile_counter && vct_i < vct_tile_counter);A [ vct_i ] == 0);
+        for(int vct_tile_counter = vct_tile_low(tid,8);vct_tile_counter < vct_tile_upp(tid,8) && vct_tile_counter < A.length;vct_tile_counter = vct_tile_counter + 1){
+          A [ vct_tile_counter ] = 0;
+        }
+      }
+  }
+  
+}
+

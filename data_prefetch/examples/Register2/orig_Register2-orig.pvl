@@ -1,0 +1,49 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases RegisterOrig2
+//:: tools silicon
+//:: verdict Pass
+
+class RegisterOrig2 {
+  
+  gpuopt glob_to_reg a tid;
+  gpuopt glob_to_reg b tid;
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere a.length == b.length;
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 ));
+  ensures (\forall int i;i >= 0 && i < a.length;i != a.length - 1 ==> a [ i ] == \old( 2 * (a [ (i + 1) ] + 1) ));
+  ensures (\forall int i;i >= 0 && i < a.length;i == a.length - 1 ==> a [ i ] == \old( 2 * (a [ 0 ] + 1) ));
+  void Register_Orig(int[] a,int[] b){
+    par One_kernel(int tid = 0 .. a.length)
+      requires (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 2 ));
+      requires (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+      requires Perm( b [ tid ] , 1 );
+      ensures Perm( b [ tid ] , 1 );
+      ensures Perm( a [ tid ] , 1 );
+      ensures a [ tid ] == b [ tid ];
+      {
+        if (tid != a.length - 1) {
+          b [ tid ] = a [ (tid + 1) ];
+        } else {
+          b [ tid ] = a [ 0 ];
+        }
+        b [ tid ] = b [ tid ] + 1;
+        barrier(One_kernel) { 
+          requires (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 2 ));
+          requires (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+          requires Perm( b [ tid ] , 1 );
+          ensures Perm( b [ tid ] , 1 );
+          ensures Perm( a [ tid ] , 1 );
+        }
+        b [ tid ] = 2 * b [ tid ];
+        a [ tid ] = b [ tid ];
+      }
+    assert (\forall int i;i >= 0 && i < a.length;i != a.length - 1 ==> a [ i ] == \old( 2 * (a [ (i + 1) ] + 1) ));
+    assert (\forall int i;i >= 0 && i < a.length;i == a.length - 1 ==> a [ i ] == \old( 2 * (a [ 0 ] + 1) ));
+  }
+  
+}
+

@@ -1,0 +1,43 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_IterMergeMult
+//:: tools silicon
+//:: verdict Pass
+
+class IterMergeMult {
+  
+  requires y >= 0;
+  ensures (y == 0 ==> \result == 1);
+  ensures (y != 0 ==> \result == x * vct_mi_pow(x,y - 1));
+  static pure int vct_mi_pow(int x,int y) = y == 0 ? 1 : x * vct_mi_pow(x,y - 1);
+  
+  void zero(){
+    int i = 1;
+    int a = i;
+    int k = 0;
+    int vct_mi_l = 0;
+    assert 1 <= i;
+    assert i <= 258;
+    i = i * 2;
+    vct_mi_l = vct_mi_l + 1;
+    assert 1 <= i;
+    assert i <= 258;
+    i = i * 2;
+    vct_mi_l = vct_mi_l + 1;
+    loop_invariant 2 <= vct_mi_l;
+    loop_invariant vct_mi_l <= 8;
+    loop_invariant i == 1 * vct_mi_pow(2,vct_mi_l);
+    loop_invariant vct_mi_l % 3 == 2;
+    loop_invariant 1 * 4 <= i;
+    loop_invariant i <= 258;
+    while(i < 130){
+      i = i * 2;
+      vct_mi_l = vct_mi_l + 1;
+      i = i * 2;
+      vct_mi_l = vct_mi_l + 1;
+      i = i * 2;
+      vct_mi_l = vct_mi_l + 1;
+    }
+  }
+  
+}
+

@@ -1,0 +1,77 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: case GraphReachability
+//:: tools silicon
+//:: verdict Pass
+
+class Graph {
+  
+  pure boolean graph(int n,seq<seq<boolean>> G) = (| G |) == n && (\forall seq<boolean> e;e in G;(| e |) == n);
+  
+  requires graph(n,G);
+  pure boolean Path(int n,seq<seq<boolean>> G,seq<int> P) = (\forall int j;0 <= j && j < (| P |);0 <= P [ j ] && P [ j ] < n) && (\forall int j;0 <= j && j < (| P |) - 1;(G [ (P [ j ]) ]) [ (P [ (j + 1) ]) ]);
+  
+  requires 1024 == n && graph(n,G);
+  requires (0 <= x && x < n && 0 <= y && y < n);
+  yields seq<int> P;
+  ensures (\result ==> 0 < (| P |));
+  ensures (\result ==> P [ 0 ] == x && P [ ((| P |) - 1) ] == y);
+  ensures (\result ==> Path(n,G,P));
+  boolean search(int n,seq<seq<boolean>> G,int x,int y){
+    boolean[] marked = new boolean[n];
+    int i = 0;
+    gpuopt iter_merge i 2;
+    loop_invariant 0 <= i;
+    loop_invariant i <= 1024;
+    loop_invariant (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+    loop_invariant (\forall int j;0 <= j && j < i;! marked [ j ]);
+    while(i < 1024){
+      marked [ i ] = false;
+      i = i + 1;
+    }
+    return explore(n,G,marked,x,y)with {
+      P = P;
+    };
+  }
+  
+  context_everywhere marked != null;
+  context_everywhere marked.length == n;
+  context_everywhere 0 <= x;
+  context_everywhere x < n;
+  context_everywhere 0 <= y;
+  context_everywhere y < n;
+  requires 1024 == n && graph(n,G);
+  requires (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+  yields seq<int> P;
+  ensures 1024 == n && graph(n,G);
+  ensures (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+  ensures (\result ==> 0 < (| P |));
+  ensures (\result ==> P [ 0 ] == x && P [ ((| P |) - 1) ] == y);
+  ensures (\result ==> Path(n,G,P));
+  boolean explore(int n,seq<seq<boolean>> G,boolean[] marked,int x,int y){
+    if (x == y) {
+      P = seq<int>{x};
+      return true;
+    }
+    marked [ x ] = true;
+    int next = 0;
+    gpuopt iter_merge next 3;
+    loop_invariant 0 <= next;
+    loop_invariant next <= 1024;
+    loop_invariant (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+    while(next < 1024){
+      if ((G [ x ]) [ next ] && ! marked [ next ]) {
+        boolean rec = explore(n,G,marked,next,y)with {
+          P = P;
+        };
+        if (rec) {
+          P = seq<int>{x} + P;
+          return true;
+        }
+      }
+      next = next + 1;
+    }
+    return false;
+  }
+  
+}
+

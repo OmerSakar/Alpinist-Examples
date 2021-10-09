@@ -1,0 +1,19 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases IterMergeDiv
+//:: tools silicon
+//:: verdict Pass
+
+class IterMergeDiv {
+  
+  void zero(){
+    int i = 243;
+    gpuopt iter_merge i 2;
+    loop_invariant 2 <= i;
+    loop_invariant i <= 243;
+    while(i > 6){
+      i = i / 3;
+    }
+  }
+  
+}
+

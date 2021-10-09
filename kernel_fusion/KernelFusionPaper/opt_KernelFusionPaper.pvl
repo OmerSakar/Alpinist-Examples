@@ -1,0 +1,66 @@
+class Example {
+  
+  context_everywhere a != null;
+  context_everywhere a.length == size;
+  context_everywhere b != null;
+  context_everywhere b.length == size;
+  context_everywhere a.length == 1024;
+  context_everywhere b.length == 1024;
+  context_everywhere size == 1024;
+  context_everywhere N > 0;
+  context_everywhere N < a.length;
+  requires (\forall* int i;i >= 0 && i < size;Perm( a [ i ] , 1 \ 1 ));
+  requires (\forall* int i;i >= 0 && i < size;Perm( b [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < size;Perm( a [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < size;Perm( b [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < size;a [ i ] == N * i);
+  ensures (\forall* int i;i >= 0 && i < size;(i != size - 1 ==> b [ i ] == N * (i + 1)) && (i == size - 1 ==> b [ i ] == 0));
+  void simple_example(int[] a,int[] b,int size,int N){
+    par vct_fused_kernels(int vct_fused_tid = 0 .. size)
+      requires Perm( b [ vct_fused_tid ] , 1 \ 1 );
+      requires Perm( a [ vct_fused_tid ] , 1 \ 1 );
+      ensures Perm( b [ vct_fused_tid ] , 1 \ 1 );
+      ensures (vct_fused_tid == size - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+      ensures Perm( a [ vct_fused_tid ] , 1 \ 2 );
+      ensures (vct_fused_tid != size - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 \ 2 ));
+      ensures a [ vct_fused_tid ] == N * vct_fused_tid;
+      ensures (vct_fused_tid != size - 1 ==> b [ vct_fused_tid ] == N * (vct_fused_tid + 1));
+      ensures (vct_fused_tid == size - 1 ==> b [ vct_fused_tid ] == 0);
+      {
+        a [ vct_fused_tid ] = 0;
+        assert Perm( a [ vct_fused_tid ] , 1 );
+        assert a [ vct_fused_tid ] == 0;
+        loop_invariant k >= 0;
+        loop_invariant k <= N;
+        loop_invariant Perm( a [ vct_fused_tid ] , 1 );
+        loop_invariant Perm( b [ vct_fused_tid ] , 1 );
+        loop_invariant a [ vct_fused_tid ] == k * vct_fused_tid;
+        for(int k = 0;k < N;k ++){
+          a [ vct_fused_tid ] = a [ vct_fused_tid ] + vct_fused_tid;
+        }
+        assert a [ vct_fused_tid ] == N * vct_fused_tid;
+        barrier(vct_fused_kernels)
+          requires Perm( a [ vct_fused_tid ] , 1 );
+          requires Perm( b [ vct_fused_tid ] , 1 );
+          requires a [ vct_fused_tid ] == N * vct_fused_tid;
+          ensures Perm( b [ vct_fused_tid ] , 1 );
+          ensures (vct_fused_tid != size - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 \ 2 ));
+          ensures (vct_fused_tid == size - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+          ensures Perm( a [ vct_fused_tid ] , 1 \ 2 );
+          ensures a [ vct_fused_tid ] == N * vct_fused_tid;
+          ensures (vct_fused_tid != size - 1 ==> a [ (vct_fused_tid + 1) ] == N * (vct_fused_tid + 1));
+          ensures (vct_fused_tid == size - 1 ==> a [ 0 ] == 0);
+        {
+        }
+        if (vct_fused_tid != size - 1) {
+          b [ vct_fused_tid ] = a [ (vct_fused_tid + 1) ];
+        } else {
+          b [ vct_fused_tid ] = a [ 0 ];
+        }
+        assert vct_fused_tid != size - 1 ==> b [ vct_fused_tid ] == N * (vct_fused_tid + 1);
+        assert vct_fused_tid == size - 1 ==> b [ vct_fused_tid ] == 0;
+      }
+  }
+  
+}
+

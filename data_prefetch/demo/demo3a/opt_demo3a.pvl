@@ -1,0 +1,32 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_demo3a
+//:: tools silicon
+//:: verdict Pass
+
+class ArraySum {
+  int sum;
+  
+  context_everywhere A != null;
+  requires (\forall* int i;0 <= i && i < A.length;Perm( A [ i ] , 1 \ 2 ));
+  requires Perm( this.sum , write );
+  ensures (\forall* int i;0 <= i && i < A.length;Perm( A [ i ] , 1 \ 2 ));
+  ensures Perm( this.sum , write );
+  void sum(int[] A){
+    invariant inv (Perm( this.sum , write )){
+      par
+        (int tid = 0 .. A.length)
+        requires Perm( A [ tid ] , 1 \ 2 );
+        ensures Perm( A [ tid ] , 1 \ 2 );
+        {
+          atomic (inv){
+            int A_reg_0 = A [ tid ];
+            {
+              sum = sum + A_reg_0;
+            }
+          }
+        }
+    }
+  }
+  
+}
+

@@ -1,0 +1,70 @@
+class KernelFusionOrig6 {
+  
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere c != null;
+  context_everywhere a.length == b.length;
+  context_everywhere a.length == c.length;
+  context_everywhere a.length == 2048;
+  context_everywhere b.length == 2048;
+  context_everywhere c.length == 2048;
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 \ 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( c [ i ] , 1 \ 1 ));
+  requires (\forall int i;i >= 0 && i < a.length;a [ i ] == 1);
+  requires (\forall int i;i >= 0 && i < a.length;b [ i ] == 2);
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 2 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( c [ i ] , 1 \ 1 ));
+  void Kernel_Fusion_Orig(int[] a,int[] b,int[] c){
+    par vct_fused_kernels(int vct_fused_tid = 0 .. a.length)
+      requires Perm( c [ vct_fused_tid ] , 1 \ 1 );
+      requires Perm( a [ vct_fused_tid ] , 1 \ 2 );
+      requires (vct_fused_tid == 2048 - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+      requires (vct_fused_tid != 2048 - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 \ 2 ));
+      requires Perm( b [ vct_fused_tid ] , 1 \ 2 );
+      requires Perm( b [ vct_fused_tid ] , 1 \ 1 - 1 \ 2 );
+      ensures Perm( c [ vct_fused_tid ] , 1 \ 1 );
+      ensures Perm( a [ vct_fused_tid ] , 1 \ 1 );
+      ensures Perm( b [ vct_fused_tid ] , 1 \ 2 );
+      ensures b [ vct_fused_tid ] == a [ vct_fused_tid ];
+      {
+        c [ vct_fused_tid ] = b [ vct_fused_tid ] - 1;
+        assert Perm( a [ vct_fused_tid ] , 1 \ 2 );
+        assert Perm( b [ vct_fused_tid ] , 1 \ 2 );
+        assert Perm( c [ vct_fused_tid ] , 1 \ 1 );
+        assert c [ vct_fused_tid ] == b [ vct_fused_tid ] - 1;
+        c [ vct_fused_tid ] = a [ vct_fused_tid ];
+        assert Perm( b [ vct_fused_tid ] , 1 \ 2 );
+        assert Perm( a [ vct_fused_tid ] , 1 \ 2 );
+        assert Perm( c [ vct_fused_tid ] , 1 \ 1 );
+        assert c [ vct_fused_tid ] == a [ vct_fused_tid ];
+        if (vct_fused_tid != a.length - 1) {
+          b [ vct_fused_tid ] = a [ (vct_fused_tid + 1) ];
+        } else {
+          b [ vct_fused_tid ] = a [ 0 ];
+        }
+        barrier(vct_fused_kernels)
+          requires (vct_fused_tid != a.length - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 \ 2 ));
+          requires (vct_fused_tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+          requires Perm( b [ vct_fused_tid ] , 1 \ 1 );
+          requires (vct_fused_tid != a.length - 1 ==> b [ vct_fused_tid ] == a [ (vct_fused_tid + 1) ]);
+          requires (vct_fused_tid == a.length - 1 ==> b [ vct_fused_tid ] == a [ 0 ]);
+          requires Perm( c [ vct_fused_tid ] , 1 \ 1 );
+          ensures Perm( c [ vct_fused_tid ] , 1 \ 1 );
+          ensures Perm( a [ vct_fused_tid ] , 1 \ 2 );
+          ensures Perm( b [ vct_fused_tid ] , 1 \ 1 );
+        {
+        }
+        c [ vct_fused_tid ] = a [ vct_fused_tid ];
+        assert Perm( a [ vct_fused_tid ] , 1 \ 2 );
+        assert Perm( a [ vct_fused_tid ] , 1 \ 2 );
+        assert Perm( b [ vct_fused_tid ] , 1 \ 2 );
+        assert Perm( c [ vct_fused_tid ] , 1 \ 1 );
+        assert a [ vct_fused_tid ] == c [ vct_fused_tid ];
+        a [ vct_fused_tid ] = b [ vct_fused_tid ];
+      }
+  }
+  
+}
+

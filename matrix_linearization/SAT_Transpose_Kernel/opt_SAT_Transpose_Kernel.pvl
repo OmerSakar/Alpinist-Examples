@@ -1,0 +1,62 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_SAT-Transpose-Kernel
+//:: tools silicon
+//:: verdict Pass
+
+class SAT {
+  
+    static pure int vct_ml_Idx(int vct_ml_X,int vct_ml_a,int vct_ml_b) = vct_ml_X * vct_ml_a + vct_ml_b;
+
+    context_everywhere N > 0;
+    context_everywhere output != null;
+    context_everywhere output.length == N * N;
+    context_everywhere (| output_seq_pref_1 |) == N;
+    context_everywhere (\forall int i;0 <= i && i < N;(| output_seq_pref_1 [ i ] |) == N);
+    requires (\forall* int i;0 <= i && i < N;(\forall* int j;0 <= j && j < N;Perm( output [ vct_ml_Idx(N,j,i) ] , read )));
+    requires (\forall int i;0 <= i && i < N;(\forall int j;0 <= j && j < N;output [ vct_ml_Idx(N,j,i) ] == (output_seq_pref_1 [ i ]) [ j ]));
+    ensures (\forall* int i;0 <= i && i < N;(\forall* int j;0 <= j && j < N;Perm( output [ vct_ml_Idx(N,j,i) ] , read )));
+    ensures (\forall int i;0 <= i && i < N;(\forall int j;0 <= j && j < N;output [ vct_ml_Idx(N,j,i) ] == (output_seq_pref_1 [ j ]) [ i ]));
+    void Transpose_Kernel(int[] output,seq<seq<int>> output_seq_pref_1,int N){
+        par TransposeX(int tidX = 0 .. N)
+            requires tidX >= 0 && tidX < N;
+            requires (| output_seq_pref_1 |) == N;
+            requires (\forall int i;i >= 0 && i < N;(| output_seq_pref_1 [ i ] |) == N);
+            requires (\forall* int i;i >= 0 && i < N;Perm( output [ vct_ml_Idx(N,i,tidX) ] , read ));
+            requires (\forall int i;i >= 0 && i < N;output [ vct_ml_Idx(N,i,tidX) ] == (output_seq_pref_1 [ tidX ]) [ i ]);
+            ensures tidX >= 0 && tidX < N;
+            ensures (| output_seq_pref_1 |) == N;
+            ensures (\forall int i;i >= 0 && i < N;(| output_seq_pref_1 [ i ] |) == N);
+            ensures (\forall* int i;i >= 0 && i < N;Perm( output [ vct_ml_Idx(N,tidX,i) ] , read ));
+            ensures (\forall int i;i >= 0 && i < N;output [ vct_ml_Idx(N,tidX,i) ] == (output_seq_pref_1 [ tidX ]) [ i ]);
+        {
+            par TransposeY(int tidY = 0 .. N)
+                requires tidX >= 0 && tidX < N;
+                requires (tidY >= 0 && tidY < N);
+                requires (| output_seq_pref_1 |) == N;
+                requires (\forall int i;i >= 0 && i < N;(| output_seq_pref_1 [ i ] |) == N);
+                requires Perm( output [ vct_ml_Idx(N,tidY,tidX) ] , read );
+                requires output [ vct_ml_Idx(N,tidY,tidX) ] == (output_seq_pref_1 [ tidX ]) [ tidY ];
+                ensures tidX >= 0 && tidX < N;
+                ensures (tidY >= 0 && tidY < N);
+                ensures (| output_seq_pref_1 |) == N;
+                ensures (\forall int i;i >= 0 && i < N;(| output_seq_pref_1 [ i ] |) == N);
+                ensures Perm( output [ vct_ml_Idx(N,tidX,tidY) ] , write );
+                ensures output [ vct_ml_Idx(N,tidX,tidY) ] == (output_seq_pref_1 [ tidX ]) [ tidY ];
+            {
+                int temporary = output [ vct_ml_Idx(N,tidY,tidX) ];
+                barrier(TransposeY) {
+                    requires tidX >= 0 && tidX < N;
+                    requires (tidY >= 0 && tidY < N);
+                    requires Perm( output [ vct_ml_Idx(N,tidY,tidX) ] , read );
+                    ensures tidX >= 0 && tidX < N;
+                    ensures (tidY >= 0 && tidY < N);
+                    ensures Perm( output [ vct_ml_Idx(N,tidX,tidY) ] , write );
+                }
+                output [ vct_ml_Idx(N,tidX,tidY) ] = temporary;
+            }
+        }
+        assert (\forall int i;0 <= i && i < N;(\forall int j;0 <= j && j < N;output [ vct_ml_Idx(N,j,i) ] == (output_seq_pref_1 [ j ]) [ i ]));
+    }
+
+}
+

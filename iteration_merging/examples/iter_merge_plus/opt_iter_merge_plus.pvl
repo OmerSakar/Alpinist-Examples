@@ -1,0 +1,32 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_IterMergePlus
+//:: tools silicon
+//:: verdict Pass
+
+class IterMergePlus {
+  
+  void zero(int N){
+    int i = 0;
+    int vct_mi_l = 0;
+    assert 0 <= i;
+    assert i < 2080;
+    i = i + 32;
+    vct_mi_l = vct_mi_l + 1;
+    loop_invariant 1 <= vct_mi_l;
+    loop_invariant vct_mi_l <= 64;
+    loop_invariant i == 0 + 32 * vct_mi_l;
+    loop_invariant i % 3 == 32 % 3;
+    loop_invariant 0 + 32 <= i;
+    loop_invariant i < 2080;
+    while(i < 2048){
+      i = i + 32;
+      vct_mi_l = vct_mi_l + 1;
+      i = i + 32;
+      vct_mi_l = vct_mi_l + 1;
+      i = i + 32;
+      vct_mi_l = vct_mi_l + 1;
+    }
+  }
+  
+}
+

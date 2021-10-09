@@ -1,0 +1,40 @@
+class ArraySum {
+  int sum;
+  
+  //ignoring contract of predicate
+    resource lock_invariant() = Perm( this.sum , 1 );
+  
+  ArraySum(){
+  }
+  
+  static pure int vct_tile_low(int a,int b) = a * b;
+  
+  static pure int vct_tile_upp(int a,int b) = (a + 1) * b;
+  
+  requires b > 0;
+  static pure int vct_tile_ceiling(int a,int b) = a % b == 0 ? a / b : a / b + 1;
+  
+  context_everywhere A != null;
+  context_everywhere A.length == 8192;
+  requires (\forall* int i_0;0 <= i_0 && i_0 < vct_tile_ceiling(A.length,4096);(\forall* int i_1;i_1 >= vct_tile_low(i_0,4096) && i_1 < vct_tile_upp(i_0,4096) && i_1 < A.length;Perm( A [ i_1 ] , 1 \ 2 )));
+  ensures (\forall* int i_0;0 <= i_0 && i_0 < vct_tile_ceiling(A.length,4096);(\forall* int i_1;i_1 >= vct_tile_low(i_0,4096) && i_1 < vct_tile_upp(i_0,4096) && i_1 < A.length;Perm( A [ i_1 ] , 1 \ 2 )));
+  void sum(int[] A){
+    par (int tid = 0 .. vct_tile_ceiling(A.length,4096))
+      requires (\forall* int vct_i;vct_i >= vct_tile_low(tid,4096) && (vct_i < vct_tile_upp(tid,4096) && (vct_i < vct_tile_upp(tid,4096) && vct_i < A.length));Perm( A [ vct_i ] , 1 \ 2 ));
+      ensures (\forall* int vct_i;vct_i >= vct_tile_low(tid,4096) && (vct_i < vct_tile_upp(tid,4096) && (vct_i < vct_tile_upp(tid,4096) && vct_i < A.length));Perm( A [ vct_i ] , 1 \ 2 ));
+      {
+        assert tid <= A.length / 4096;
+        loop_invariant vct_tile_counter >= vct_tile_low(tid,4096);
+        loop_invariant vct_tile_counter <= vct_tile_upp(tid,4096);
+        loop_invariant vct_tile_counter <= A.length;
+        loop_invariant (\forall* int vct_i;vct_i >= vct_tile_low(tid,4096) && (vct_i < vct_tile_upp(tid,4096) && (vct_i < vct_tile_upp(tid,4096) && vct_i < A.length));Perm( A [ vct_i ] , 1 \ 2 ));
+        for(int vct_tile_counter = vct_tile_low(tid,4096);vct_tile_counter < vct_tile_upp(tid,4096) && vct_tile_counter < A.length;vct_tile_counter = vct_tile_counter + 1){
+          lock this;
+          sum = sum + A [ vct_tile_counter ];
+          unlock this;
+        }
+      }
+  }
+  
+}
+

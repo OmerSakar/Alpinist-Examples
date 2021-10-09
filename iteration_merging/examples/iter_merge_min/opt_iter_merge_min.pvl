@@ -1,0 +1,31 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_IterMergeMin
+//:: tools silicon
+//:: verdict Pass
+class IterMergeMin {
+  
+  void zero(int N){
+    int i = 2047;
+    int vct_mi_l = 0;
+    assert - 32 <= i;
+    assert i <= 2047;
+    i = i - 32;
+    vct_mi_l = vct_mi_l + 1;
+    loop_invariant 1 <= vct_mi_l;
+    loop_invariant vct_mi_l <= 64;
+    loop_invariant i == 2047 - 32 * vct_mi_l;
+    loop_invariant i % 3 == 2015 % 3;
+    loop_invariant - 32 <= i;
+    loop_invariant i <= 2047 - 32;
+    while(i >= 0){
+      i = i - 32;
+      vct_mi_l = vct_mi_l + 1;
+      i = i - 32;
+      vct_mi_l = vct_mi_l + 1;
+      i = i - 32;
+      vct_mi_l = vct_mi_l + 1;
+    }
+  }
+  
+}
+

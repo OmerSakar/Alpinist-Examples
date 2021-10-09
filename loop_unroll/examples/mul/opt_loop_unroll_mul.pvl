@@ -1,0 +1,81 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: case opt_LoopUnrollingMult
+//:: tools silicon
+//:: verdict Pass
+
+class LoopUnrollingMult {
+  seq<int> res;
+  
+  context_everywhere Perm( res , write );
+  requires isEmpty( res );
+  ensures (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] * 2 == res [ (j + 1) ]);
+  void zero(){
+    int i = 1;
+    int oldI = i;
+    int k = 0;
+    assert 0 <= k;
+    assert i == oldI * pow(2,k);
+    assert 1 <= i;
+    assert i <= 16;
+    assert (| res |) == k;
+    assert k == 1 ==> res [ 0 ] * 2 == i;
+    assert (\forall int j;0 <= j && j < (| res |);res [ j ] == oldI * pow(2,j));
+    assert (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] * 2 == res [ (j + 1) ]);
+    res = res ++ i;
+    i = i * 2;
+    k = k + 1;
+    assert 0 <= k;
+    assert i == oldI * pow(2,k);
+    assert 1 <= i;
+    assert i <= 16;
+    assert (| res |) == k;
+    assert k == 1 ==> res [ 0 ] * 2 == i;
+    assert (\forall int j;0 <= j && j < (| res |);res [ j ] == oldI * pow(2,j));
+    assert (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] * 2 == res [ (j + 1) ]);
+    res = res ++ i;
+    i = i * 2;
+    k = k + 1;
+    assert 0 <= k;
+    assert i == oldI * pow(2,k);
+    assert 1 <= i;
+    assert i <= 16;
+    assert (| res |) == k;
+    assert k == 1 ==> res [ 0 ] * 2 == i;
+    assert (\forall int j;0 <= j && j < (| res |);res [ j ] == oldI * pow(2,j));
+    assert (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] * 2 == res [ (j + 1) ]);
+    res = res ++ i;
+    i = i * 2;
+    k = k + 1;
+    assert 0 <= k;
+    assert i == oldI * pow(2,k);
+    assert 1 <= i;
+    assert i <= 16;
+    assert (| res |) == k;
+    assert k == 1 ==> res [ 0 ] * 2 == i;
+    assert (\forall int j;0 <= j && j < (| res |);res [ j ] == oldI * pow(2,j));
+    assert (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] * 2 == res [ (j + 1) ]);
+    res = res ++ i;
+    i = i * 2;
+    k = k + 1;
+    loop_invariant 0 <= k;
+    loop_invariant i == oldI * pow(2,k);
+    loop_invariant 1 * 16 <= i;
+    loop_invariant i <= 16;
+    loop_invariant (| res |) == k;
+    loop_invariant k == 1 ==> res [ 0 ] * 2 == i;
+    loop_invariant (\forall int j;0 <= j && j < (| res |);res [ j ] == oldI * pow(2,j));
+    loop_invariant (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] * 2 == res [ (j + 1) ]);
+    while(i < 16){
+      res = res ++ i;
+      i = i * 2;
+      k = k + 1;
+    }
+  }
+  
+  requires y >= 0;
+  ensures (y == 0 ==> \result == 1);
+  ensures (y != 0 ==> \result == x * pow(x,y - 1));
+  static pure int pow(int x,int y) = y == 0 ? 1 : x * pow(x,y - 1);
+  
+}
+

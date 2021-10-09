@@ -1,0 +1,73 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases KernelFusionPaper
+//:: tools silicon
+//:: verdict Pass
+
+class Example {
+  context_everywhere a != null && a.length == size;
+  context_everywhere b != null && b.length == size;
+  context_everywhere a.length == 1024;
+  context_everywhere b.length == 1024;
+  context_everywhere size == 1024;
+  context_everywhere N > 0 && N < a.length;
+  context (\forall* int i; i >= 0 && i < size; Perm(a[i], 1));
+  context (\forall* int i; i >= 0 && i < size; Perm(b[i], 1));
+  ensures (\forall* int i; i >= 0 && i < size; a[i] == N*i);
+  ensures (\forall* int i; i >= 0 && i < size; (i != size-1 ==> b[i] == N*(i+1)) && (i == size-1 ==> b[i] == 0) );
+  void simple_example(int[] a, int[] b, int size, int N)
+  {
+    gpuopt fuse 2 1;
+    par threads (int tid = 0 .. size)
+    context Perm(a[tid], 1);
+    ensures a[tid] == 0;
+    {
+      a[tid] = 0;
+    }
+
+    par threads (int tid = 0 .. size)
+    requires Perm(a[tid], 1);
+    context Perm(b[tid], 1);
+    requires a[tid] == 0;
+    ensures tid != size-1 ==> Perm(a[tid+1], 1\2);
+    ensures tid == size-1 ==> Perm(a[0], 1\2);
+    ensures Perm(a[tid], 1\2);
+    ensures a[tid] == N*tid;
+    ensures tid != size-1 ==> b[tid] == N*(tid+1);
+    ensures tid == size-1 ==> b[tid] == 0;
+    {
+      loop_invariant k >= 0 && k <= N;
+      loop_invariant Perm(a[tid], 1);
+      loop_invariant Perm(b[tid], 1);
+      loop_invariant a[tid] == k*tid;
+      for(int k = 0; k < N; k++)
+      {
+        a[tid] = a[tid] + tid;
+      }
+
+      assert a[tid] == N*tid;
+
+      barrier(threads)
+       requires Perm(a[tid], 1);
+       requires Perm(b[tid], 1);
+       requires a[tid] == N*tid;
+       ensures Perm(b[tid], 1);
+       ensures tid != size-1 ==> Perm(a[tid+1], 1\2);
+       ensures tid == size-1 ==> Perm(a[0], 1\2);
+       ensures Perm(a[tid], 1\2);
+       ensures a[tid] == N*tid;
+       ensures tid != size-1 ==> a[tid+1] == N*(tid+1);
+       ensures tid == size-1 ==> a[0] == 0;
+      {}
+
+      if (tid != size-1)
+      {
+        b[tid] = a[tid+1];
+      }else{
+        b[tid] = a[0];
+      }
+
+      assert tid != size-1 ==> b[tid] == N*(tid+1);
+      assert tid == size-1 ==> b[tid] == 0;
+    }
+  }
+}

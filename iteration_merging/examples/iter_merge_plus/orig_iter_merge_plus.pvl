@@ -1,0 +1,19 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases IterMergePlus
+//:: tools silicon
+//:: verdict Pass
+
+class IterMergePlus {
+  
+  void zero(int N){
+    int i = 0;
+    gpuopt iter_merge i 3;
+    loop_invariant 0 <= i;
+    loop_invariant i < 2080;
+    while(i < 2048){
+      i = i + 32;
+    }
+  }
+  
+}
+

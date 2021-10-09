@@ -1,0 +1,45 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_kernel-example
+//:: tools silicon
+//:: verdict Pass
+class Ref {
+  
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere c != null;
+  context_everywhere tcount >= 0;
+  context_everywhere (a.length == tcount && b.length == tcount && c.length == tcount);
+  requires (\forall* int i;0 <= i && i < tcount;Perm( a [ i ] , write ));
+  requires (\forall* int i;0 <= i && i < tcount;Perm( b [ i ] , write ));
+  requires (\forall* int i;0 <= i && i < tcount;Perm( c [ i ] , 1 \ 4 ));
+  void main(int tcount,int[] a,int[] b,int[] c){
+    par
+      fwd(int tid = 0 .. tcount)
+      requires Perm( a [ tid ] , write );
+      requires Perm( b [ tid ] , write );
+      requires Perm( c [ tid ] , 1 \ 4 );
+      {
+        b [ tid ] = c [ tid ];
+        barrier(fwd) { 
+          requires 0 <= tid && tid < tcount;
+          requires (tid > 0 ==> Perm( a [ tid ] , write ));
+          requires Perm( b [ tid ] , write );
+          requires Perm( c [ tid ] , 1 \ 4 );
+          ensures 0 <= tid && tid < tcount;
+          ensures (tid > 0 ==> Perm( a [ tid ] , write ));
+          ensures Perm( b [ tid ] , 1 \ 4 );
+          ensures (tid > 0 ==> Perm( b [ (tid - 1) ] , 1 \ 4 ));
+        }
+        int b_reg_0;
+        if (true && tid > 0) b_reg_0 = b [ (tid - 1) ];
+        int a_reg_1;
+        if (true && tid > 0) a_reg_1 = a [ tid ];
+        if (tid > 0) {
+          a_reg_1 = b_reg_0 + b [ tid ];
+        }
+        if (true && tid > 0) a [ tid ] = a_reg_1;
+      }
+  }
+  
+}
+

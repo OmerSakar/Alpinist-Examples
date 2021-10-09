@@ -1,0 +1,60 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_forward-dep-noauto
+//:: tools silicon
+//:: verdict Pass
+
+class Ref {
+  
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere c != null;
+  context_everywhere tcount >= 0;
+  context_everywhere (a.length == tcount && b.length == tcount && c.length == tcount);
+  requires (\forall* int i;0 <= i && i < tcount;Perm( b [ i ] , read ));
+  requires (\forall* int i;0 <= i && i < tcount;Perm( c [ i ] , write ));
+  requires (\forall* int i;0 <= i && i < tcount;Perm( a [ i ] , write ));
+  requires (\forall int i;0 <= i && i < tcount;b [ i ] == i);
+  ensures (\forall* int i;0 <= i && i < tcount;Perm( b [ i ] , read ));
+  ensures (\forall* int i;0 <= i && i < tcount;Perm( c [ i ] , write ));
+  ensures (\forall* int i;0 <= i && i < tcount;Perm( a [ i ] , 1 \ 2 ));
+  ensures (\forall int i;0 <= i && i < tcount;b [ i ] == i);
+  ensures (\forall int i;0 <= i && i < tcount;a [ i ] == i + 1);
+  ensures (\forall int i;1 <= i && i < tcount;c [ i ] == i + 2);
+  void main(int tcount,int[] a,int[] b,int[] c){
+    par
+      fwd(int tid = 0 .. tcount)
+      requires Perm( b [ tid ] , read );
+      requires Perm( c [ tid ] , write );
+      requires Perm( a [ tid ] , write );
+      requires b [ tid ] == tid;
+      ensures Perm( b [ tid ] , read );
+      ensures Perm( c [ tid ] , write );
+      ensures Perm( a [ tid ] , 1 \ 2 );
+      ensures (tid > 0 ==> Perm( a [ (tid - 1) ] , 1 \ 2 ));
+      ensures (tid == tcount - 1 ==> Perm( a [ tid ] , 1 \ 2 ));
+      ensures b [ tid ] == tid;
+      ensures a [ tid ] == tid + 1;
+      ensures (tid > 0 ==> c [ tid ] == tid + 2);
+      {
+        int a_reg_0 = a [ tid ];
+        int b_reg_2 = b [ tid ];
+        a_reg_0 = b_reg_2 + 1;
+        a [ tid ] = a_reg_0;
+        barrier(fwd) { 
+          requires 0 <= tid && tid < tcount;
+          requires (tid < tcount - 1 ==> Perm( a [ tid ] , 1 \ 2 ));
+          requires (tid < tcount - 1 ==> a [ tid ] == tid + 1);
+          ensures 0 <= tid && tid < tcount;
+          ensures (tid > 0 ==> Perm( a [ (tid - 1) ] , 1 \ 2 ));
+          ensures (tid > 0 ==> a [ (tid - 1) ] == tid);
+        }
+        int a_reg_1;
+        if (true && tid > 0) a_reg_1 = a [ (tid - 1) ];
+        if (tid > 0) {
+          c [ tid ] = a_reg_1 + 2;
+        }
+      }
+  }
+  
+}
+

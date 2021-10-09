@@ -1,0 +1,41 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases RegisterOrig3
+//:: tools silicon
+//:: verdict Pass
+
+class RegisterOrig3 {
+  
+  gpuopt glob_to_reg a tid tid + 2;
+  gpuopt glob_to_reg b tid tid + 2;
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere N > 0;
+  context_everywhere a.length == b.length;
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 2 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 2 ));
+  ensures (\forall int i;i >= 0 && i < a.length;a [ i ] == \old( a [ i ] ) + N * b [ i ]);
+  void Register_Orig(int[] a,int[] b,int N){
+    par kernel1(int tid = 0 .. a.length)
+      requires Perm( a [ tid ] , 1 );
+      requires Perm( b [ tid ] , 1 \ 2 );
+      ensures Perm( a [ tid ] , 1 );
+      ensures Perm( b [ tid ] , 1 \ 2 );
+      ensures a [ tid ] == \old( a [ tid ] ) + N * b [ tid ];
+      {
+        int counter = 0;
+        loop_invariant counter >= 0;
+        loop_invariant counter <= N;
+        loop_invariant Perm( a [ tid ] , 1 );
+        loop_invariant Perm( b [ tid ] , 1 \ 2 );
+        loop_invariant a [ tid ] == \old( a [ tid ] ) + counter * b [ tid ];
+        while(counter < N){
+          a [ tid ] = a [ tid ] + b [ tid ];
+          counter = counter + 1;
+        }
+      }
+  }
+  
+}
+

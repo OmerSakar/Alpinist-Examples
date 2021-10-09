@@ -1,0 +1,53 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_ZeroMultiple-Many
+//:: tools silicon
+//:: verdict Pass
+
+class ZeroMany {
+  int x;
+  
+  static pure int vct_ml_Idx(int vct_ml_X,int vct_ml_a,int vct_ml_b) = vct_ml_X * vct_ml_a + vct_ml_b;
+  
+  context_everywhere ar != null;
+  context_everywhere matrix != null;
+  context_everywhere M >= 0;
+  context_everywhere N >= 0;
+  context_everywhere ar.length == N;
+  context_everywhere \array( matrix , M * N );
+  requires Perm( x , 1 );
+  requires (\forall* int i;0 <= i && i < N;Perm( ar [ i ] , write ));
+  requires (\forall* int i1;0 <= i1 && i1 < M;(\forall* int j1;0 <= j1 && j1 < N;Perm( matrix [ vct_ml_Idx(N,i1,j1) ] , write )));
+  ensures Perm( x , 1 );
+  ensures (\forall* int i;0 <= i && i < N;Perm( ar [ i ] , write ));
+  ensures (\forall* int i1;0 <= i1 && i1 < M;(\forall* int j1;0 <= j1 && j1 < N;Perm( matrix [ vct_ml_Idx(N,i1,j1) ] , write )));
+  ensures x == 0;
+  ensures (\forall int i;0 <= i && i < N;ar [ i ] == 0);
+  ensures (\forall int i3;0 <= i3 && i3 < M;(\forall int j3;0 <= j3 && j3 < N;matrix [ vct_ml_Idx(N,i3,j3) ] == 0));
+  void initialise(int M,int N,int[] ar,int[] matrix){
+    par
+      ()
+      requires Perm( x , 1 );
+      ensures Perm( x , 1 );
+      ensures x == 0;
+      {
+        x = 0;
+      } and 
+      (int i = 0 .. N)
+      requires Perm( ar [ i ] , write );
+      ensures Perm( ar [ i ] , write );
+      ensures ar [ i ] == 0;
+      {
+        ar [ i ] = 0;
+      } and 
+      (int i = 0 .. M,int j = 0 .. N)
+      requires Perm( matrix [ vct_ml_Idx(N,i,j) ] , write );
+      ensures Perm( matrix [ vct_ml_Idx(N,i,j) ] , write );
+      ensures matrix [ vct_ml_Idx(N,i,j) ] == 0;
+      {
+        matrix [ vct_ml_Idx(N,i,j) ] = 0;
+      }
+  }
+  
+}
+
+`

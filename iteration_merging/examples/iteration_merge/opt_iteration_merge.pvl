@@ -1,0 +1,55 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_MergingAndUnrollingOrig
+//:: tools silicon
+//:: verdict Pass
+
+class MergingAndUnrollingOrig {
+  
+    context_everywhere array != null;
+    requires (\forall* int i;i >= 0 && i < array.length;Perm( array [ i ] , 1 ));
+    ensures (\forall* int i;i >= 0 && i < array.length;Perm( array [ i ] , 1 ));
+    ensures (\forall int i;i >= 0 && i < array.length;array [ i ] == \old( array [ i ] ) + 107 * i);
+    void merging_unrolling_orig(int[] array){
+        par threads(int tid = 0 .. array.length)
+            requires Perm( array [ tid ] , 1 );
+            ensures Perm( array [ tid ] , 1 );
+            ensures array [ tid ] == \old( array [ tid ] ) + 107 * tid;
+        {
+            int vct_mi_l = 0;
+            int j = 0;
+            assert j >= 0;
+            assert j <= 107;
+            assert Perm( array [ tid ] , 1 );
+            assert array [ tid ] == \old( array [ tid ] ) + j * tid;
+            array [ tid ] = array [ tid ] + tid;
+            vct_mi_l = vct_mi_l + 1;
+            j ++;
+            assert j >= 0;
+            assert j <= 107;
+            assert Perm( array [ tid ] , 1 );
+            assert array [ tid ] == \old( array [ tid ] ) + j * tid;
+            array [ tid ] = array [ tid ] + tid;
+            vct_mi_l = vct_mi_l + 1;
+            j ++;
+            loop_invariant 2 <= vct_mi_l;
+            loop_invariant (vct_mi_l <= 107 ** (j == 0 + 1 * vct_mi_l ** (j % 5 == 2 % 5 ** (j >= 0 + 2 ** j <= 107 ** Perm( array [ tid ] , 1 ) ** array [ tid ] == \old( array [ tid ] ) + j * tid))));
+            for(j;j < 107;j ++){
+                array [ tid ] = array [ tid ] + tid;
+                j ++;
+                vct_mi_l = vct_mi_l + 1;
+                array [ tid ] = array [ tid ] + tid;
+                j ++;
+                vct_mi_l = vct_mi_l + 1;
+                array [ tid ] = array [ tid ] + tid;
+                j ++;
+                vct_mi_l = vct_mi_l + 1;
+                array [ tid ] = array [ tid ] + tid;
+                j ++;
+                vct_mi_l = vct_mi_l + 1;
+                array [ tid ] = array [ tid ] + tid;
+                vct_mi_l = vct_mi_l + 1;
+            }
+        }
+    }
+}
+

@@ -1,0 +1,32 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_IterMergeDiv
+//:: tools silicon
+//:: verdict Pass
+
+class IterMergeDiv {
+  
+  requires k >= 0;
+  requires y != 0;
+  ensures (k == 0 ==> \result == x);
+  ensures (k != 0 ==> \result == vct_mi_div(x,y,k - 1) / y);
+  static pure int vct_mi_div(int x,int y,int k) = k == 0 ? x : vct_mi_div(x,y,k - 1) / y;
+  
+  void zero(){
+    int i = 243;
+    int vct_mi_l = 0;
+    loop_invariant 0 <= vct_mi_l;
+    loop_invariant vct_mi_l <= 4;
+    loop_invariant vct_mi_l % 2 == 0;
+    loop_invariant i == vct_mi_div(243,3,vct_mi_l);
+    loop_invariant 2 <= i;
+    loop_invariant i <= 243;
+    while(i > 6){
+      i = i / 3;
+      vct_mi_l = vct_mi_l + 1;
+      i = i / 3;
+      vct_mi_l = vct_mi_l + 1;
+    }
+  }
+  
+}
+

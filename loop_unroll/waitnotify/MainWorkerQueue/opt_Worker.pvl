@@ -1,0 +1,154 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases opt_WaitNotify
+//:: tools silicon
+//:: verdict Pass
+class Worker {
+  Queue q1;
+  Queue q2;
+  
+  ensures Value( this.q1 );
+  ensures this.q1 == q1;
+  ensures Value( this.q2 );
+  ensures this.q2 == q2;
+  Worker(Queue q1,Queue q2){
+    this.q1 = q1;
+    this.q2 = q2;
+  }
+  
+  requires Value( q1 );
+  requires q1 != null;
+  requires Value( q2 );
+  requires q2 != null;
+  void run(){
+    int tmp;
+    int i = 0;
+    assert 0 <= i;
+    assert i <= 4;
+    assert Value( q1 );
+    assert q1 != null;
+    assert Value( q2 );
+    assert q2 != null;
+    tmp = q1.take();
+    tmp = tmp + 2;
+    q2.put(tmp);
+    i = i + 1;
+    assert 0 <= i;
+    assert i <= 4;
+    assert Value( q1 );
+    assert q1 != null;
+    assert Value( q2 );
+    assert q2 != null;
+    tmp = q1.take();
+    tmp = tmp + 2;
+    q2.put(tmp);
+    i = i + 1;
+    assert 0 <= i;
+    assert i <= 4;
+    assert Value( q1 );
+    assert q1 != null;
+    assert Value( q2 );
+    assert q2 != null;
+    tmp = q1.take();
+    tmp = tmp + 2;
+    q2.put(tmp);
+    i = i + 1;
+    assert 0 <= i;
+    assert i <= 4;
+    assert Value( q1 );
+    assert q1 != null;
+    assert Value( q2 );
+    assert q2 != null;
+    tmp = q1.take();
+    tmp = tmp + 2;
+    q2.put(tmp);
+    i = i + 1;
+    loop_invariant 0 + 4 <= i;
+    loop_invariant i <= 4;
+    loop_invariant Value( q1 );
+    loop_invariant q1 != null;
+    loop_invariant Value( q2 );
+    loop_invariant q2 != null;
+    while(i < 4){
+      tmp = q1.take();
+      tmp = tmp + 2;
+      q2.put(tmp);
+      i = i + 1;
+    }
+  }
+  
+}
+
+class Queue {
+  int data;
+  boolean used;
+  
+  //ignoring contract of predicate
+    resource lock_invariant() = Perm( used , 1 ) ** Perm( data , 1 );
+  
+  Queue(){
+    data = 37;
+    used = false;
+  }
+  
+  void put(int x){
+    lock this;
+    loop_invariant Perm( used , 1 );
+    loop_invariant Perm( data , 1 );
+    loop_invariant held( this );
+    while(used){
+      wait this;
+    }
+    used = true;
+    data = x;
+    notify this;
+    unlock this;
+  }
+  
+  int take(){
+    int res;
+    lock this;
+    loop_invariant Perm( used , 1 );
+    loop_invariant Perm( data , 1 );
+    loop_invariant held( this );
+    while(! used){
+      wait this;
+    }
+    res = data;
+    used = false;
+    notify this;
+    unlock this;
+    return res;
+  }
+  
+}
+
+class Main {
+  Queue q1;
+  Queue q2;
+  
+  ensures Value( q1 );
+  ensures q1 != null;
+  ensures Value( q2 );
+  ensures q2 != null;
+  Main(){
+    q1 = new Queue();
+    q2 = new Queue();
+    q1.put(1);
+    q2.put(2);
+  }
+  
+  requires Value( q1 );
+  requires q1 != null;
+  requires Value( q2 );
+  requires q2 != null;
+  void main(){
+    Worker w1 = new Worker(q1,q2);
+    Worker w2 = new Worker(q2,q1);
+    fork w1;
+    fork w2;
+    join w1;
+    join w2;
+  }
+  
+}
+

@@ -1,0 +1,31 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases demo3b
+//:: tools silicon
+//:: verdict Pass
+
+class ArraySum {
+  int sum;
+  
+  //ignoring contract of predicate
+    resource lock_invariant() = Perm( this.sum , 1 );
+  
+  ArraySum(){
+  }
+  
+  gpuopt glob_to_reg A tid;
+  context_everywhere A != null;
+  requires (\forall* int i;0 <= i && i < A.length;Perm( A [ i ] , 1 \ 2 ));
+  ensures (\forall* int i;0 <= i && i < A.length;Perm( A [ i ] , 1 \ 2 ));
+  void sum(int[] A){
+    par (int tid = 0 .. A.length)
+      requires Perm( A [ tid ] , 1 \ 2 );
+      ensures Perm( A [ tid ] , 1 \ 2 );
+      {
+        lock this;
+        sum = sum + A [ tid ];
+        unlock this;
+      }
+  }
+  
+}
+

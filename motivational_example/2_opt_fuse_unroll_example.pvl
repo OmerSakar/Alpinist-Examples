@@ -1,0 +1,66 @@
+class Example {
+
+  gpuopt glob_to_reg a (vct_fused_tid+1);
+  gpuopt glob_to_reg a 0;
+  context_everywhere a != null;
+  context_everywhere a.length == 1024;
+  context_everywhere N > 0;
+  context_everywhere N < a.length;
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;i != a.length - 1 ==> Perm( a [ (i + 1) ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;i == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length - 1;a [ (i + 1) ] == N * i);
+  ensures a [ 0 ] == N * (a.length - 1);
+  void simple_example(int[] a,int size,int N){
+    par vct_fused_kernels(int vct_fused_tid = 0 .. a.length)
+      requires Perm( a [ vct_fused_tid ] , 1 );
+      ensures (vct_fused_tid != a.length - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 \ 1 ));
+      ensures (vct_fused_tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 1 ));
+      ensures (vct_fused_tid != a.length - 1 ==> a [ (vct_fused_tid + 1) ] == N * vct_fused_tid);
+      ensures (vct_fused_tid == a.length - 1 ==> a [ 0 ] == N * vct_fused_tid);
+      {
+        a [ vct_fused_tid ] = 0;
+        barrier(vct_fused_kernels)
+          requires Perm( a [ vct_fused_tid ] , 1 );
+          requires a [ vct_fused_tid ] == 0;
+          ensures (vct_fused_tid != a.length - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 ));
+          ensures (vct_fused_tid == a.length - 1 ==> Perm( a [ 0 ] , 1 ));
+          ensures (vct_fused_tid != a.length - 1 ==> a [ (vct_fused_tid + 1) ] == 0);
+          ensures (vct_fused_tid == a.length - 1 ==> a [ 0 ] == 0);
+        {
+        }
+        int k = 0;
+        assert k >= 0;
+        assert k <= N;
+        assert vct_fused_tid != a.length - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 );
+        assert vct_fused_tid == a.length - 1 ==> Perm( a [ 0 ] , 1 );
+        assert vct_fused_tid != a.length - 1 ==> a [ (vct_fused_tid + 1) ] == k * vct_fused_tid;
+        assert vct_fused_tid == a.length - 1 ==> a [ 0 ] == k * vct_fused_tid;
+        if (vct_fused_tid != a.length - 1) {
+          a [ (vct_fused_tid + 1) ] = a [ (vct_fused_tid + 1) ] + vct_fused_tid;
+        } else {
+          a [ 0 ] = a [ 0 ] + vct_fused_tid;
+        }
+        k ++;
+        loop_invariant k >= 0 + 1;
+        loop_invariant k <= N;
+        loop_invariant vct_fused_tid != a.length - 1 ==> Perm( a [ (vct_fused_tid + 1) ] , 1 );
+        loop_invariant vct_fused_tid == a.length - 1 ==> Perm( a [ 0 ] , 1 );
+        loop_invariant vct_fused_tid != a.length - 1 ==> a [ (vct_fused_tid + 1) ] == k * vct_fused_tid;
+        loop_invariant vct_fused_tid == a.length - 1 ==> a [ 0 ] == k * vct_fused_tid;
+        for(k;k < N;k ++){
+          if (vct_fused_tid != a.length - 1) {
+            a [ (vct_fused_tid + 1) ] = a [ (vct_fused_tid + 1) ] + vct_fused_tid;
+          } else {
+            a [ 0 ] = a [ 0 ] + vct_fused_tid;
+          }
+        }
+        assert vct_fused_tid != a.length - 1 ==> a [ (vct_fused_tid + 1) ] == N * vct_fused_tid;
+        assert vct_fused_tid == a.length - 1 ==> a [ 0 ] == N * vct_fused_tid;
+      }
+    assert (\forall* int i;i >= 0 && i < a.length - 1;a [ (i + 1) ] == N * i);
+    assert a [ 0 ] == N * (a.length - 1);
+  }
+  
+}
+

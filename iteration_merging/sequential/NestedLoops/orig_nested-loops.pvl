@@ -1,0 +1,39 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases NestedLoops
+//:: tools silicon
+//:: verdict Pass
+
+class NestedLoops {
+  
+  requires n == 1024;
+  ensures \result == n * n * n;
+  int cubed(int n){
+    int i;
+    int j;
+    int res;
+    int tmp;
+    i = 0;
+    res = 0;
+    gpuopt iter_merge i 4;
+    loop_invariant 0 <= i;
+    loop_invariant i <= 1024;
+    loop_invariant res == i * i * i;
+    while(i < 1024){
+      j = 0;
+      tmp = 0;
+      loop_invariant 0 <= j;
+      loop_invariant j <= i;
+      loop_invariant tmp == j * j;
+      while(j < i){
+        tmp = tmp + j;
+        j = j + 1;
+        tmp = tmp + j;
+      }
+      res = res + 3 * tmp + 3 * i + 1;
+      i = i + 1;
+    }
+    return res;
+  }
+  
+}
+

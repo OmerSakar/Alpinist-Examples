@@ -1,0 +1,21 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases IterMergeMult
+//:: tools silicon
+//:: verdict Pass
+
+class IterMergeMult {
+  
+  void zero(){
+    int i = 1;
+    int a = i;
+    int k = 0;
+    gpuopt iter_merge i 3;
+    loop_invariant 1 <= i;
+    loop_invariant i <= 258;
+    while(i < 130){
+      i = i * 2;
+    }
+  }
+  
+}
+

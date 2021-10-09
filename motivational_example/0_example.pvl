@@ -1,0 +1,55 @@
+class Example 
+{
+  
+
+  context_everywhere a != null;
+  context_everywhere a.length == 1024;
+  context_everywhere N > 0 && N < a.length;
+  requires (\forall* int i; i >= 0 && i < a.length; Perm(a[i], 1));
+  ensures (\forall* int i; i >= 0 && i < a.length; i != a.length-1 ==> Perm(a[i+1], 1));
+  ensures (\forall* int i; i >= 0 && i < a.length; i == a.length-1 ==> Perm(a[0], 1));
+  ensures (\forall* int i; i >= 0 && i < a.length-1; a[i+1] == N*i);
+  ensures a[0] == N*(a.length-1);
+  void simple_example(int[] a, int size, int N)
+  {
+    gpuopt fuse 2 1;
+    par threads (int tid = 0 .. a.length)
+    context Perm(a[tid], 1);
+    ensures a[tid] == 0;
+    {
+      a[tid] = 0;
+    }
+    
+    //assert (\forall int i; i >= 0 && i < a.length; a[i] == 0);
+
+    par threads (int tid = 0 .. a.length)
+        context     tid != a.length-1 ==> Perm(a[tid+1], 1);
+        context     tid == a.length-1 ==> Perm(a[0], 1);
+        requires    tid != a.length-1 ==> a[tid+1] == 0;
+        requires    tid == a.length-1 ==> a[0] == 0;
+        ensures     tid != a.length-1 ==> a[tid+1] == N*tid;
+        ensures     tid == a.length-1 ==> a[0] == N*tid;
+    {
+      loop_invariant k >= 0 && k <= N;
+      loop_invariant tid != a.length-1 ==> Perm(a[tid+1], 1);
+      loop_invariant tid == a.length-1 ==> Perm(a[0], 1);
+      //loop_invariant k == 0 ==> a[tid] == 0;
+      loop_invariant tid != a.length-1 ==> a[tid+1] == k*tid;
+      loop_invariant tid == a.length-1 ==> a[0] == k*tid;
+      for(int k = 0; k < N; k++)
+      {
+        if (tid != a.length-1) {
+      	    a[tid+1] = a[tid+1] + tid;
+        } else {
+            a[0] = a[0] + tid;
+        }
+      }
+
+      assert tid != a.length-1 ==> a[tid+1] == N*tid;
+      assert tid == a.length-1 ==> a[0] == N*tid;
+    }
+
+    assert (\forall* int i; i >= 0 && i < a.length-1; a[i+1] == N*i);
+    assert a[0] == N*(a.length-1);
+  }
+}

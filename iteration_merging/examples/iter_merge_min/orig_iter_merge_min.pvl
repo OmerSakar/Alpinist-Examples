@@ -1,0 +1,19 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases IterMergeMin
+//:: tools silicon
+//:: verdict Pass
+
+class IterMergeMin {
+  
+  void zero(int N){
+    int i = 2047;
+    gpuopt iter_merge i 3;
+    loop_invariant - 32 <= i;
+    loop_invariant i <= 2047;
+    while(i >= 0){
+      i = i - 32;
+    }
+  }
+  
+}
+
