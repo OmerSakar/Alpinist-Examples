@@ -1,0 +1,278 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/timsort1/bad_timsort1.pvl
+[progress] parsing pass took 34460ms
+[progress] AST conversion pass took 430ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/timsort1/bad_timsort1.pvl successfully
+[progress] Parsed 1 file(s) in: 35970ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 610 ms
+[progress] [09%] unrollLoops took 810 ms
+[progress] [12%] checkTypesJava took 170 ms
+[progress] [16%] splitCompositeDeclarations took 120 ms
+[progress] [19%] loadExternalClasses took 170 ms
+[progress] [22%] standardize took 200 ms
+[progress] [25%] specifyImplicitLoopLabels took 0 ms
+[progress] [29%] propagateAbstractMethodContracts took 300 ms
+[progress] [32%] arrayNullValuesToNone took 160 ms
+[progress] [35%] finalizeArguments took 170 ms
+[progress] [38%] addRequirementSatCheck took 140 ms
+[progress] [41%] breakReturnToGoto took 120 ms
+[progress] [45%] checkAssignInPar took 0 ms
+[progress] [48%] propagateInvariants took 0 ms
+[progress] [51%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 1820ms
+[progress] AST conversion took 110ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 370ms
+[progress] AST conversion took 20ms
+[progress] [54%] simplify took 5290 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 120ms
+[progress] [58%] optimizeForSilver took 130 ms
+[progress] [61%] desugarArrayOps took 20 ms
+[progress] [64%] flattenNestedExpressions took 10 ms
+[progress] [67%] encodeInheritanceToDomain took 0 ms
+[progress] [70%] importADTsAndRefEncode took 9110 ms
+[progress] [74%] returnTypeToOutParameter took 0 ms
+[progress] [77%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 0 ms
+[progress] [83%] generateQuantifierTriggers took 20 ms
+[progress] [87%] scaleAllPredicateApplications took 100 ms
+[progress] [90%] collectInnerDeclarations took 150 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 230ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/timsort1/bad_timsort1.pvl ===
+ 251     }
+ 252     int chunk = RUN;
+        [---------------------------
+ 253     gpuopt loop_unroll chunk 1;
+ 254     loop_invariant RUN == 32;
+ 255     loop_invariant length > 0;
+ 256     loop_invariant chunk >= RUN;
+ 257     loop_invariant chunk < size + chunk;
+ 258     loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 259     loop_invariant (| inp_seq_all |) == length;
+ 260     loop_invariant (| inp_seq_cur |) == size;
+ 261     loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 262     loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 263     loop_invariant (\forall int i;0 <= i && i < size;(inp_seq_all [ (length - 1) ]) [ i ] == inp_seq_cur [ i ]);
+ 264     loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 265     while(chunk < size){
+ 266       int left = 0;
+ 267       loop_invariant left >= 0;
+ 268       loop_invariant left < size + 2 * chunk;
+ 269       loop_invariant length > 0;
+ 270       loop_invariant chunk < size;
+ 271       loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 272       loop_invariant (| inp_seq_all |) == length;
+ 273       loop_invariant (| inp_seq_cur |) == size;
+ 274       loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 275       loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 276       loop_invariant (\forall int i;0 <= i && i < size;(inp_seq_all [ (length - 1) ]) [ i ] == inp_seq_cur [ i ]);
+ 277       loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 278       while(left < size){
+ 279         int mid = left + chunk - 1;
+ 280         int right;
+ 281         if (left + 2 * chunk - 1 < size - 1) {
+ 282           right = left + 2 * chunk - 1;
+ 283         } else {
+ 284           right = size - 1;
+ 285         }
+ 286         if (mid < size - 1) {
+ 287           int start = left;
+ 288           int end = right;
+ 289           int start2 = mid + 1;
+ 290           if (input [ mid ] <= input [ start2 ]) {
+ 291             return
+ 292             ;
+ 293           }
+ 294           assert inp_seq_all [ (length - 1) ] == inp_seq_cur;
+ 295           assert isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 296           loop_invariant length > 0;
+ 297           loop_invariant (| inp_seq_all |) == length;
+ 298           loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 299           loop_invariant (| inp_seq_cur |) == size;
+ 300           loop_invariant start >= 0;
+ 301           loop_invariant start < size;
+ 302           loop_invariant end >= 0;
+ 303           loop_invariant end < size;
+ 304           loop_invariant start <= end;
+ 305           loop_invariant mid + 1 >= start;
+ 306           loop_invariant mid <= end;
+ 307           loop_invariant start2 > mid;
+ 308           loop_invariant start2 <= end + 1;
+ 309           loop_invariant (\forall* int k;k >= 0 && k < size;Perm( input [ k ] , write ));
+ 310           loop_invariant (\forall int k;0 <= k && k < size;input [ k ] == inp_seq_cur [ k ]);
+ 311           loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 312           while(start <= mid && start2 <= end){
+ 313             if (input [ start ] <= input [ start2 ]) {
+ 314               start ++;
+ 315             } else {
+ 316               int index = start2;
+ 317               int temp;
+ 318               loop_invariant length > 0;
+ 319               loop_invariant (| inp_seq_all |) == length;
+ 320               loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 321               loop_invariant (| inp_seq_cur |) == size;
+ 322               loop_invariant start >= 0;
+ 323               loop_invariant start < size;
+ 324               loop_invariant end >= 0;
+ 325               loop_invariant end < size;
+ 326               loop_invariant start <= end;
+ 327               loop_invariant mid >= start;
+ 328               loop_invariant mid <= end;
+ 329               loop_invariant start2 > mid;
+ 330               loop_invariant start2 <= end;
+ 331               loop_invariant index <= start2;
+ 332               loop_invariant index >= start;
+ 333               loop_invariant (\forall* int k;k >= 0 && k < size;Perm( input [ k ] , write ));
+ 334               loop_invariant (\forall int k;0 <= k && k < size;input [ k ] == inp_seq_cur [ k ]);
+ 335               loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 336               while(index != start){
+ 337                 lemma_permutation_apply(inp_seq_all [ 0 ],inp_seq_cur,swap(inp_seq_cur,index - 1,index,0),index - 1,index);
+ 338                 temp = input [ (index - 1) ];
+ 339                 input [ (index - 1) ] = input [ index ];
+ 340                 inp_seq_cur = inp_seq_cur [ index - 1 -> input [ index ] ];
+ 341                 input [ index ] = temp;
+ 342                 inp_seq_cur = inp_seq_cur [ index -> temp ];
+ 343                 index --;
+ 344               }
+ 345               start ++;
+ 346               mid ++;
+ 347               start2 ++;
+ 348             }
+ 349           }
+ 350           assert (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 351         }
+ 352         inp_seq_all = inp_seq_all + seq<seq<int>>{inp_seq_cur};
+ 353         length ++;
+ 354         left = left + 2 * chunk;
+ 355       }
+ 356       chunk = 2 * chunk;
+ 357     }
+     -----]
+ 358     assert (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 359   }
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/timsort1/bad_timsort1.pvl ===
+ 251     }
+ 252     int chunk = RUN;
+        [---------------------------
+ 253     gpuopt loop_unroll chunk 1;
+ 254     loop_invariant RUN == 32;
+ 255     loop_invariant length > 0;
+ 256     loop_invariant chunk >= RUN;
+ 257     loop_invariant chunk < size + chunk;
+ 258     loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 259     loop_invariant (| inp_seq_all |) == length;
+ 260     loop_invariant (| inp_seq_cur |) == size;
+ 261     loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 262     loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 263     loop_invariant (\forall int i;0 <= i && i < size;(inp_seq_all [ (length - 1) ]) [ i ] == inp_seq_cur [ i ]);
+ 264     loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 265     while(chunk < size){
+ 266       int left = 0;
+ 267       loop_invariant left >= 0;
+ 268       loop_invariant left < size + 2 * chunk;
+ 269       loop_invariant length > 0;
+ 270       loop_invariant chunk < size;
+ 271       loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 272       loop_invariant (| inp_seq_all |) == length;
+ 273       loop_invariant (| inp_seq_cur |) == size;
+ 274       loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 275       loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 276       loop_invariant (\forall int i;0 <= i && i < size;(inp_seq_all [ (length - 1) ]) [ i ] == inp_seq_cur [ i ]);
+ 277       loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 278       while(left < size){
+ 279         int mid = left + chunk - 1;
+ 280         int right;
+ 281         if (left + 2 * chunk - 1 < size - 1) {
+ 282           right = left + 2 * chunk - 1;
+ 283         } else {
+ 284           right = size - 1;
+ 285         }
+ 286         if (mid < size - 1) {
+ 287           int start = left;
+ 288           int end = right;
+ 289           int start2 = mid + 1;
+ 290           if (input [ mid ] <= input [ start2 ]) {
+ 291             return
+ 292             ;
+ 293           }
+ 294           assert inp_seq_all [ (length - 1) ] == inp_seq_cur;
+ 295           assert isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 296           loop_invariant length > 0;
+ 297           loop_invariant (| inp_seq_all |) == length;
+ 298           loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 299           loop_invariant (| inp_seq_cur |) == size;
+ 300           loop_invariant start >= 0;
+ 301           loop_invariant start < size;
+ 302           loop_invariant end >= 0;
+ 303           loop_invariant end < size;
+ 304           loop_invariant start <= end;
+ 305           loop_invariant mid + 1 >= start;
+ 306           loop_invariant mid <= end;
+ 307           loop_invariant start2 > mid;
+ 308           loop_invariant start2 <= end + 1;
+ 309           loop_invariant (\forall* int k;k >= 0 && k < size;Perm( input [ k ] , write ));
+ 310           loop_invariant (\forall int k;0 <= k && k < size;input [ k ] == inp_seq_cur [ k ]);
+ 311           loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 312           while(start <= mid && start2 <= end){
+ 313             if (input [ start ] <= input [ start2 ]) {
+ 314               start ++;
+ 315             } else {
+ 316               int index = start2;
+ 317               int temp;
+ 318               loop_invariant length > 0;
+ 319               loop_invariant (| inp_seq_all |) == length;
+ 320               loop_invariant (\forall int k;0 <= k && k < length;(| inp_seq_all [ k ] |) == size);
+ 321               loop_invariant (| inp_seq_cur |) == size;
+ 322               loop_invariant start >= 0;
+ 323               loop_invariant start < size;
+ 324               loop_invariant end >= 0;
+ 325               loop_invariant end < size;
+ 326               loop_invariant start <= end;
+ 327               loop_invariant mid >= start;
+ 328               loop_invariant mid <= end;
+ 329               loop_invariant start2 > mid;
+ 330               loop_invariant start2 <= end;
+ 331               loop_invariant index <= start2;
+ 332               loop_invariant index >= start;
+ 333               loop_invariant (\forall* int k;k >= 0 && k < size;Perm( input [ k ] , write ));
+ 334               loop_invariant (\forall int k;0 <= k && k < size;input [ k ] == inp_seq_cur [ k ]);
+ 335               loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 336               while(index != start){
+ 337                 lemma_permutation_apply(inp_seq_all [ 0 ],inp_seq_cur,swap(inp_seq_cur,index - 1,index,0),index - 1,index);
+ 338                 temp = input [ (index - 1) ];
+ 339                 input [ (index - 1) ] = input [ index ];
+ 340                 inp_seq_cur = inp_seq_cur [ index - 1 -> input [ index ] ];
+ 341                 input [ index ] = temp;
+ 342                 inp_seq_cur = inp_seq_cur [ index -> temp ];
+ 343                 index --;
+ 344               }
+ 345               start ++;
+ 346               mid ++;
+ 347               start2 ++;
+ 348             }
+ 349           }
+ 350           assert (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 351         }
+ 352         inp_seq_all = inp_seq_all + seq<seq<int>>{inp_seq_cur};
+ 353         length ++;
+ 354         left = left + 2 * chunk;
+ 355       }
+ 356       chunk = 2 * chunk;
+ 357     }
+     -----]
+ 358     assert (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 359   }
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 68310 ms
+The final verdict is Fail
+[progress] entire run took 226593 ms

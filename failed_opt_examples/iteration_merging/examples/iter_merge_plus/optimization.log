@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/examples/iter_merge_plus/bad_iter_merge_plus.pvl
+[progress] parsing pass took 0ms
+[progress] AST conversion pass took 0ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/examples/iter_merge_plus/bad_iter_merge_plus.pvl successfully
+[progress] Parsed 1 file(s) in: 20ms
+[progress] [20%] splitCompositeDeclarations took 0 ms
+[progress] [40%] checkTypesJava took 0 ms
+At file Alpinist-Examples-Bad/iteration_merging/examples/iter_merge_plus/bad_iter_merge_plus.pvl from line 10 column 5 until line 15 column 5: The number of iterations is less than the number of iterations to merge at file Alpinist-Examples-Bad/iteration_merging/examples/iter_merge_plus/bad_iter_merge_plus.pvl from line 10 column 5 until line 10 column 27
+The final verdict is Error
+[progress] entire run took 13329 ms

@@ -1,0 +1,99 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/sequential/NestedLoops/bad_nested-loops.pvl
+[progress] parsing pass took 1320ms
+[progress] AST conversion pass took 80ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/sequential/NestedLoops/bad_nested-loops.pvl successfully
+[progress] Parsed 1 file(s) in: 1410ms
+[progress] [03%] splitCompositeDeclarations took 10 ms
+[progress] [07%] checkTypesJava took 10 ms
+[progress] [11%] unrollLoops took 40 ms
+[progress] [15%] checkTypesJava took 10 ms
+[progress] [19%] splitCompositeDeclarations took 0 ms
+[progress] [23%] loadExternalClasses took 10 ms
+[progress] [26%] specifyImplicitLoopLabels took 10 ms
+[progress] [30%] propagateAbstractMethodContracts took 10 ms
+[progress] [34%] arrayNullValuesToNone took 0 ms
+[progress] [38%] addRequirementSatCheck took 0 ms
+[progress] [42%] checkAssignInPar took 0 ms
+[progress] [46%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 1240ms
+[progress] AST conversion took 60ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 140ms
+[progress] AST conversion took 0ms
+[progress] [50%] simplify took 1640 ms
+[progress] first parsing pass took 10ms
+[progress] AST conversion took 0ms
+[progress] [53%] optimizeForSilver took 20 ms
+[progress] [57%] desugarArrayOps took 0 ms
+[progress] [61%] flattenNestedExpressions took 0 ms
+[progress] [65%] encodeInheritanceToDomain took 0 ms
+[progress] [69%] importADTsAndRefEncode took 10 ms
+[progress] [73%] returnTypeToOutParameter took 0 ms
+[progress] [76%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 0 ms
+[progress] [84%] scaleAllPredicateApplications took 0 ms
+[progress] [88%] collectInnerDeclarations took 10 ms
+[progress] [92%] collectDeclarations took 10 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 170ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/sequential/NestedLoops/bad_nested-loops.pvl ===
+  15     i = 0;
+  16     res = 0;
+        [-----------------------
+  17     gpuopt loop_unroll i 1;
+  18     loop_invariant 0 <= i;
+  19     loop_invariant i <= n;
+  20     loop_invariant res == i * i * i;
+  21     while(i < n){
+  22       j = 0;
+  23       tmp = 0;
+  24       loop_invariant 0 <= j;
+  25       loop_invariant j <= i;
+  26       loop_invariant tmp == j * j;
+  27       while(j < i){
+  28         tmp = tmp + j;
+  29         j = j + 1;
+  30         tmp = tmp + j;
+  31       }
+  32       res = res + 3 * tmp + 3 * i + 1;
+  33       i = i + 1;
+  34     }
+     -----]
+  35     return res;
+  36   }
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/sequential/NestedLoops/bad_nested-loops.pvl ===
+  15     i = 0;
+  16     res = 0;
+        [-----------------------
+  17     gpuopt loop_unroll i 1;
+  18     loop_invariant 0 <= i;
+  19     loop_invariant i <= n;
+  20     loop_invariant res == i * i * i;
+  21     while(i < n){
+  22       j = 0;
+  23       tmp = 0;
+  24       loop_invariant 0 <= j;
+  25       loop_invariant j <= i;
+  26       loop_invariant tmp == j * j;
+  27       while(j < i){
+  28         tmp = tmp + j;
+  29         j = j + 1;
+  30         tmp = tmp + j;
+  31       }
+  32       res = res + 3 * tmp + 3 * i + 1;
+  33       i = i + 1;
+  34     }
+     -----]
+  35     return res;
+  36   }
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 16298 ms
+The final verdict is Fail
+[progress] entire run took 26843 ms

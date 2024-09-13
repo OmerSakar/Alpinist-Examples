@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/PrefixSumKoggeStone/bad_Kogge-Stone.pvl
+[progress] parsing pass took 7300ms
+[progress] AST conversion pass took 170ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/PrefixSumKoggeStone/bad_Kogge-Stone.pvl successfully
+[progress] Parsed 1 file(s) in: 7480ms
+[progress] [20%] splitCompositeDeclarations took 100 ms
+[progress] [40%] checkTypesJava took 60 ms
+At file Alpinist-Examples-Bad/iteration_merging/PrefixSumKoggeStone/bad_Kogge-Stone.pvl from line 195 column 9 until line 242 column 9: The upperbound of offset is not a constant, but 2 * output.length
+The final verdict is Error
+[progress] entire run took 21121 ms

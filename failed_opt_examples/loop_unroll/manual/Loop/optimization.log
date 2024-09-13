@@ -1,0 +1,83 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/manual/Loop/bad_loop.pvl
+[progress] parsing pass took 3390ms
+[progress] AST conversion pass took 60ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/manual/Loop/bad_loop.pvl successfully
+[progress] Parsed 1 file(s) in: 3480ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [07%] checkTypesJava took 0 ms
+[progress] [11%] unrollLoops took 0 ms
+[progress] [15%] checkTypesJava took 0 ms
+[progress] [19%] splitCompositeDeclarations took 0 ms
+[progress] [23%] loadExternalClasses took 0 ms
+[progress] [26%] specifyImplicitLoopLabels took 0 ms
+[progress] [30%] propagateAbstractMethodContracts took 0 ms
+[progress] [34%] arrayNullValuesToNone took 0 ms
+[progress] [38%] addRequirementSatCheck took 320 ms
+[progress] [42%] checkAssignInPar took 0 ms
+[progress] [46%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 2110ms
+[progress] AST conversion took 90ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 330ms
+[progress] AST conversion took 30ms
+[progress] [50%] simplify took 3690 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 60ms
+[progress] [53%] optimizeForSilver took 70 ms
+[progress] [57%] desugarArrayOps took 0 ms
+[progress] [61%] flattenNestedExpressions took 0 ms
+[progress] [65%] encodeInheritanceToDomain took 0 ms
+[progress] [69%] importADTsAndRefEncode took 9650 ms
+[progress] [73%] returnTypeToOutParameter took 0 ms
+[progress] [76%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 0 ms
+[progress] [84%] scaleAllPredicateApplications took 0 ms
+[progress] [88%] collectInnerDeclarations took 0 ms
+[progress] [92%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 0ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/manual/Loop/bad_loop.pvl ===
+  18   void incr(Counter c,int y){
+  19     int i = 0;
+        [-----------------------
+  20     gpuopt loop_unroll i 1;
+  21     loop_invariant 0 <= i;
+  22     loop_invariant i <= y;
+  23     loop_invariant c != null;
+  24     loop_invariant Perm( c.x , 1 );
+  25     loop_invariant c.x == \old( c.x ) + i;
+  26     while(i < y){
+  27       c.x = c.x + 1;
+  28       i = i + 1;
+  29     }
+     -----]
+  30   }
+  31 
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/manual/Loop/bad_loop.pvl ===
+  18   void incr(Counter c,int y){
+  19     int i = 0;
+        [-----------------------
+  20     gpuopt loop_unroll i 1;
+  21     loop_invariant 0 <= i;
+  22     loop_invariant i <= y;
+  23     loop_invariant c != null;
+  24     loop_invariant Perm( c.x , 1 );
+  25     loop_invariant c.x == \old( c.x ) + i;
+  26     while(i < y){
+  27       c.x = c.x + 1;
+  28       i = i + 1;
+  29     }
+     -----]
+  30   }
+  31 
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 39585 ms
+The final verdict is Fail
+[progress] entire run took 103488 ms

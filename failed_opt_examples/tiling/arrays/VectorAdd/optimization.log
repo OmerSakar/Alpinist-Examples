@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/tiling/arrays/VectorAdd/bad_vector-add.pvl
+[progress] parsing pass took 11780ms
+[progress] AST conversion pass took 630ms
+[progress] Read Alpinist-Examples-Bad/tiling/arrays/VectorAdd/bad_vector-add.pvl successfully
+[progress] Parsed 1 file(s) in: 12980ms
+[progress] [20%] splitCompositeDeclarations took 0 ms
+[progress] [40%] checkTypesJava took 1640 ms
+At file Alpinist-Examples-Bad/tiling/arrays/VectorAdd/bad_vector-add.pvl from line 8 column 3 until line 40 column 3: The tile size 10 must be less than the upperbound 0 of tid
+The final verdict is Error
+[progress] entire run took 53984 ms

@@ -1,0 +1,251 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/PrefixSumBlelloch/bad_Blelloch.pvl
+[progress] parsing pass took 56860ms
+[progress] AST conversion pass took 220ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/PrefixSumBlelloch/bad_Blelloch.pvl successfully
+[progress] Parsed 1 file(s) in: 57690ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 550 ms
+[progress] [09%] unrollLoops took 0 ms
+[progress] [12%] checkTypesJava took 0 ms
+[progress] [15%] splitCompositeDeclarations took 0 ms
+[progress] [18%] loadExternalClasses took 0 ms
+[progress] [21%] standardize took 170 ms
+[progress] [25%] specifyImplicitLoopLabels took 0 ms
+[progress] [28%] propagateAbstractMethodContracts took 0 ms
+[progress] [31%] arrayNullValuesToNone took 0 ms
+[progress] [34%] addRequirementSatCheck took 0 ms
+[progress] [37%] checkAssignInPar took 0 ms
+[progress] [40%] propagateInvariants took 0 ms
+[progress] [43%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] [46%] liftGhostCode took 0 ms
+[progress] [50%] encodeParallelBlocks took 120 ms
+[progress] first parsing pass took 2270ms
+[progress] AST conversion took 60ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 900ms
+[progress] AST conversion took 450ms
+[progress] [53%] simplify took 6710 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 170ms
+[progress] [56%] simplifySums took 210 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [59%] optimizeForSilver took 0 ms
+[progress] [62%] desugarArrayOps took 0 ms
+[progress] [65%] flattenNestedExpressions took 610 ms
+[progress] [68%] encodeInheritanceToDomain took 0 ms
+[progress] [71%] importADTsAndRefEncode took 11800 ms
+[progress] [75%] returnTypeToOutParameter took 0 ms
+[progress] [78%] reduceQuantifierNesting took 0 ms
+[progress] [81%] inlinePatternsToTriggers took 0 ms
+[progress] [84%] generateQuantifierTriggers took 0 ms
+[progress] [87%] scaleAllPredicateApplications took 0 ms
+[progress] [90%] collectInnerDeclarations took 0 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 10ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/PrefixSumBlelloch/bad_Blelloch.pvl ===
+ 223         assert (\forall int i;0 < i && i < lvl;Matrix_UP [ i ] == up(Matrix_UP [ (i - 1) ],stride / ExpTwo(lvl - i),0,k,i));
+ 224         seq<seq<int>> Matrix = seq<seq<int>>{input_seq};
+            [----------------------------
+ 225         gpuopt loop_unroll stride 2;
+ 226         loop_invariant k > 0;
+ 227         loop_invariant output.length == ExpTwo(k);
+ 228         loop_invariant tid >= 0;
+ 229         loop_invariant tid < output.length;
+ 230         loop_invariant stride > 0;
+ 231         loop_invariant 1 <= lvl;
+ 232         loop_invariant stride == ExpTwo(lvl - 1);
+ 233         loop_invariant lvl <= k + 1;
+ 234         loop_invariant indicator + 1 == ExpTwo(lvl) * (tid + 1);
+ 235         loop_invariant indicator + 1 == 2 * stride * (tid + 1);
+ 236         loop_invariant indicator > 0;
+ 237         loop_invariant stride <= output.length;
+ 238         loop_invariant indicator < output.length ==> Perm( output [ indicator ] , write );
+ 239         loop_invariant indicator < output.length && indicator >= stride ==> Perm( output [ (indicator - stride) ] , write );
+ 240         loop_invariant tid == 0 ==> (\forall* int i;0 <= i && i < output.length && (i + 1) % stride != 0;Perm( output [ i ] , write ));
+ 241         loop_invariant tid == 0 && stride == output.length ==> Perm( output [ (output.length - 1) ] , write );
+ 242         loop_invariant (| Matrix_UP |) == lvl;
+ 243         loop_invariant (\forall int i;0 <= i && i < lvl;(| Matrix_UP [ i ] |) == output.length);
+ 244         loop_invariant lvl == 1 ==> Matrix_UP [ (lvl - 1) ] == input_seq;
+ 245         loop_invariant lvl > 1 && lvl < (| Matrix_UP |) ==> Matrix_UP [ lvl ] == up(Matrix_UP [ (lvl - 1) ],stride / 2 - 1,0,k,lvl - 1);
+ 246         loop_invariant indicator < output.length ==> (Matrix_UP [ (lvl - 1) ]) [ indicator ] == output [ indicator ];
+ 247         loop_invariant indicator < output.length && indicator >= stride ==> (Matrix_UP [ (lvl - 1) ]) [ (indicator - stride) ] == output [ (indicator - stride) ];
+ 248         loop_invariant lvl == k + 1 ==> (Matrix_UP [ (lvl - 1) ]) [ (output.length - 1) ] == intsum(input_seq);
+ 249         loop_invariant lvl == k + 1 ==> (Matrix_UP [ (lvl - 1) ]) [ ((output.length - 1) / 2) ] == intsum(Take(input_seq,(| input_seq |) / 2));
+ 250         loop_invariant (| Matrix |) == lvl;
+ 251         loop_invariant (\forall int i;0 <= i && i < lvl;0 <= (| Matrix [ i ] |) && (| Matrix [ i ] |) <= output.length);
+ 252         loop_invariant (\forall int i;0 <= i && i < lvl;(| Matrix [ i ] |) == ExpTwo(k - i));
+ 253         loop_invariant (\forall int i;0 < i && i < lvl;Matrix [ i ] == implode(Matrix [ (i - 1) ]));
+ 254         loop_invariant (\forall int i;0 <= i && i < lvl;intsum(Matrix [ i ]) == intsum(input_seq));
+ 255         loop_invariant Matrix [ 0 ] == input_seq;
+ 256         loop_invariant indicator < output.length && 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ];
+ 257         loop_invariant indicator < output.length && indicator >= stride && 2 * tid < (| Matrix [ (lvl - 1) ] |) ==> output [ (indicator - stride) ] == (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 258         while(stride < output.length){
+ 259           if (indicator < output.length && indicator >= stride) {
+ 260             assert 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ];
+ 261             assert 2 * tid < (| Matrix [ (lvl - 1) ] |) ==> output [ (indicator - stride) ] == (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 262             output [ indicator ] = output [ indicator ] + output [ (indicator - stride) ];
+ 263             assert 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ] + (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 264           }
+ 265           lemma_implode_length_mod_two(Matrix [ (lvl - 1) ]);
+ 266           lemma_implode_sum(Matrix [ (lvl - 1) ]);
+ 267           lemma_implode_get_all(Matrix [ (lvl - 1) ]);
+ 268           Matrix = Matrix + seq<seq<int>>{implode(Matrix [ (lvl - 1) ])};
+ 269           if (tid < (| implode(Matrix [ (lvl - 1) ]) |)) {
+ 270             lemma_implode_get(Matrix [ (lvl - 1) ],tid);
+ 271             assert 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> get(implode(Matrix [ (lvl - 1) ]),tid) == (Matrix [ (lvl - 1) ]) [ (2 * tid) ] + (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ];
+ 272             assert indicator < output.length && indicator >= stride ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ] + (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 273             assert Matrix [ lvl ] == implode(Matrix [ (lvl - 1) ]);
+ 274             assert indicator < output.length && indicator >= stride ==> output [ indicator ] == (Matrix [ lvl ]) [ tid ];
+ 275           }
+ 276           barrier(Threads) {
+ 277             context_everywhere k > 0;
+ 278             context_everywhere 1 <= lvl;
+ 279             context_everywhere lvl <= k;
+ 280             context_everywhere output.length == ExpTwo(k);
+ 281             context_everywhere (| Matrix |) == lvl + 1;
+ 282             requires tid >= 0 && tid < output.length;
+ 283             requires stride == ExpTwo(lvl - 1);
+ 284             requires (stride > 0 && stride < output.length);
+ 285             requires indicator + 1 == ExpTwo(lvl) * (tid + 1);
+ 286             requires indicator + 1 == 2 * stride * (tid + 1);
+ 287             requires indicator > 0;
+ 288             requires (indicator < output.length ==> Perm( output [ indicator ] , write ));
+ 289             requires (indicator < output.length && indicator >= stride ==> Perm( output [ (indicator - stride) ] , write ));
+ 290             requires (tid == 0 ==> (\forall* int i;0 <= i && i < output.length && (i + 1) % stride != 0;Perm( output [ i ] , write )));
+ 291             ensures tid >= 0 && tid < output.length;
+ 292             ensures 2 * stride == ExpTwo(lvl);
+ 293             ensures (2 * stride > 0 && 2 * stride <= output.length);
+ 294             ensures 2 * indicator + 2 == ExpTwo(lvl + 1) * (tid + 1);
+ 295             ensures 2 * indicator + 2 == 2 * stride * (tid + 1);
+ 296             ensures 2 * indicator + 1 > 0;
+ 297             ensures (2 * indicator + 1 < output.length ==> Perm( output [ (2 * indicator + 1) ] , write ));
+ 298             ensures (2 * indicator + 1 < output.length && 2 * indicator + 1 >= 2 * stride ==> Perm( output [ (2 * indicator + 1 - 2 * stride) ] , write ));
+ 299             ensures (tid == 0 ==> (\forall* int i;0 <= i && i < output.length && (i + 1) % (2 * stride) != 0;Perm( output [ i ] , write )));
+ 300             ensures (tid == 0 && 2 * stride == output.length ==> Perm( output [ (output.length - 1) ] , write ));
+ 301           }
+ 302           Matrix_UP = Matrix_UP + seq<seq<int>>{up(Matrix_UP [ (lvl - 1) ],stride,0,k,lvl)};
+ 303           assert indicator < output.length && indicator >= stride ==> (Matrix_UP [ lvl ]) [ indicator ] == (Matrix_UP [ (lvl - 1) ]) [ indicator ] + (Matrix_UP [ (lvl - 1) ]) [ (indicator - stride) ];
+ 304           indicator = 2 * indicator + 1;
+ 305           stride = 2 * stride;
+ 306           lvl = lvl + 1;
+ 307           assert (\forall int i;0 < i && i < lvl;Matrix_UP [ i ] == up(Matrix_UP [ (i - 1) ],stride / ExpTwo(lvl - i),0,k,i));
+ 308           assert stride == ExpTwo(lvl - 1);
+ 309           lemma_exp2_red_mult(lvl);
+ 310           assert ExpTwo(lvl) == 2 * ExpTwo(lvl - 1);
+ 311           assert 2 * stride == ExpTwo(lvl);
+ 312           assert indicator + 1 == ExpTwo(lvl) * (tid + 1);
+ 313           assert indicator + 1 == 2 * stride * (tid + 1);
+ 314         }
+     ---------]
+ 315         assert stride == output.length;
+ 316         assert stride == ExpTwo(lvl - 1);
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/PrefixSumBlelloch/bad_Blelloch.pvl ===
+ 223         assert (\forall int i;0 < i && i < lvl;Matrix_UP [ i ] == up(Matrix_UP [ (i - 1) ],stride / ExpTwo(lvl - i),0,k,i));
+ 224         seq<seq<int>> Matrix = seq<seq<int>>{input_seq};
+            [----------------------------
+ 225         gpuopt loop_unroll stride 2;
+ 226         loop_invariant k > 0;
+ 227         loop_invariant output.length == ExpTwo(k);
+ 228         loop_invariant tid >= 0;
+ 229         loop_invariant tid < output.length;
+ 230         loop_invariant stride > 0;
+ 231         loop_invariant 1 <= lvl;
+ 232         loop_invariant stride == ExpTwo(lvl - 1);
+ 233         loop_invariant lvl <= k + 1;
+ 234         loop_invariant indicator + 1 == ExpTwo(lvl) * (tid + 1);
+ 235         loop_invariant indicator + 1 == 2 * stride * (tid + 1);
+ 236         loop_invariant indicator > 0;
+ 237         loop_invariant stride <= output.length;
+ 238         loop_invariant indicator < output.length ==> Perm( output [ indicator ] , write );
+ 239         loop_invariant indicator < output.length && indicator >= stride ==> Perm( output [ (indicator - stride) ] , write );
+ 240         loop_invariant tid == 0 ==> (\forall* int i;0 <= i && i < output.length && (i + 1) % stride != 0;Perm( output [ i ] , write ));
+ 241         loop_invariant tid == 0 && stride == output.length ==> Perm( output [ (output.length - 1) ] , write );
+ 242         loop_invariant (| Matrix_UP |) == lvl;
+ 243         loop_invariant (\forall int i;0 <= i && i < lvl;(| Matrix_UP [ i ] |) == output.length);
+ 244         loop_invariant lvl == 1 ==> Matrix_UP [ (lvl - 1) ] == input_seq;
+ 245         loop_invariant lvl > 1 && lvl < (| Matrix_UP |) ==> Matrix_UP [ lvl ] == up(Matrix_UP [ (lvl - 1) ],stride / 2 - 1,0,k,lvl - 1);
+ 246         loop_invariant indicator < output.length ==> (Matrix_UP [ (lvl - 1) ]) [ indicator ] == output [ indicator ];
+ 247         loop_invariant indicator < output.length && indicator >= stride ==> (Matrix_UP [ (lvl - 1) ]) [ (indicator - stride) ] == output [ (indicator - stride) ];
+ 248         loop_invariant lvl == k + 1 ==> (Matrix_UP [ (lvl - 1) ]) [ (output.length - 1) ] == intsum(input_seq);
+ 249         loop_invariant lvl == k + 1 ==> (Matrix_UP [ (lvl - 1) ]) [ ((output.length - 1) / 2) ] == intsum(Take(input_seq,(| input_seq |) / 2));
+ 250         loop_invariant (| Matrix |) == lvl;
+ 251         loop_invariant (\forall int i;0 <= i && i < lvl;0 <= (| Matrix [ i ] |) && (| Matrix [ i ] |) <= output.length);
+ 252         loop_invariant (\forall int i;0 <= i && i < lvl;(| Matrix [ i ] |) == ExpTwo(k - i));
+ 253         loop_invariant (\forall int i;0 < i && i < lvl;Matrix [ i ] == implode(Matrix [ (i - 1) ]));
+ 254         loop_invariant (\forall int i;0 <= i && i < lvl;intsum(Matrix [ i ]) == intsum(input_seq));
+ 255         loop_invariant Matrix [ 0 ] == input_seq;
+ 256         loop_invariant indicator < output.length && 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ];
+ 257         loop_invariant indicator < output.length && indicator >= stride && 2 * tid < (| Matrix [ (lvl - 1) ] |) ==> output [ (indicator - stride) ] == (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 258         while(stride < output.length){
+ 259           if (indicator < output.length && indicator >= stride) {
+ 260             assert 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ];
+ 261             assert 2 * tid < (| Matrix [ (lvl - 1) ] |) ==> output [ (indicator - stride) ] == (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 262             output [ indicator ] = output [ indicator ] + output [ (indicator - stride) ];
+ 263             assert 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ] + (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 264           }
+ 265           lemma_implode_length_mod_two(Matrix [ (lvl - 1) ]);
+ 266           lemma_implode_sum(Matrix [ (lvl - 1) ]);
+ 267           lemma_implode_get_all(Matrix [ (lvl - 1) ]);
+ 268           Matrix = Matrix + seq<seq<int>>{implode(Matrix [ (lvl - 1) ])};
+ 269           if (tid < (| implode(Matrix [ (lvl - 1) ]) |)) {
+ 270             lemma_implode_get(Matrix [ (lvl - 1) ],tid);
+ 271             assert 2 * tid + 1 < (| Matrix [ (lvl - 1) ] |) ==> get(implode(Matrix [ (lvl - 1) ]),tid) == (Matrix [ (lvl - 1) ]) [ (2 * tid) ] + (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ];
+ 272             assert indicator < output.length && indicator >= stride ==> output [ indicator ] == (Matrix [ (lvl - 1) ]) [ (2 * tid + 1) ] + (Matrix [ (lvl - 1) ]) [ (2 * tid) ];
+ 273             assert Matrix [ lvl ] == implode(Matrix [ (lvl - 1) ]);
+ 274             assert indicator < output.length && indicator >= stride ==> output [ indicator ] == (Matrix [ lvl ]) [ tid ];
+ 275           }
+ 276           barrier(Threads) {
+ 277             context_everywhere k > 0;
+ 278             context_everywhere 1 <= lvl;
+ 279             context_everywhere lvl <= k;
+ 280             context_everywhere output.length == ExpTwo(k);
+ 281             context_everywhere (| Matrix |) == lvl + 1;
+ 282             requires tid >= 0 && tid < output.length;
+ 283             requires stride == ExpTwo(lvl - 1);
+ 284             requires (stride > 0 && stride < output.length);
+ 285             requires indicator + 1 == ExpTwo(lvl) * (tid + 1);
+ 286             requires indicator + 1 == 2 * stride * (tid + 1);
+ 287             requires indicator > 0;
+ 288             requires (indicator < output.length ==> Perm( output [ indicator ] , write ));
+ 289             requires (indicator < output.length && indicator >= stride ==> Perm( output [ (indicator - stride) ] , write ));
+ 290             requires (tid == 0 ==> (\forall* int i;0 <= i && i < output.length && (i + 1) % stride != 0;Perm( output [ i ] , write )));
+ 291             ensures tid >= 0 && tid < output.length;
+ 292             ensures 2 * stride == ExpTwo(lvl);
+ 293             ensures (2 * stride > 0 && 2 * stride <= output.length);
+ 294             ensures 2 * indicator + 2 == ExpTwo(lvl + 1) * (tid + 1);
+ 295             ensures 2 * indicator + 2 == 2 * stride * (tid + 1);
+ 296             ensures 2 * indicator + 1 > 0;
+ 297             ensures (2 * indicator + 1 < output.length ==> Perm( output [ (2 * indicator + 1) ] , write ));
+ 298             ensures (2 * indicator + 1 < output.length && 2 * indicator + 1 >= 2 * stride ==> Perm( output [ (2 * indicator + 1 - 2 * stride) ] , write ));
+ 299             ensures (tid == 0 ==> (\forall* int i;0 <= i && i < output.length && (i + 1) % (2 * stride) != 0;Perm( output [ i ] , write )));
+ 300             ensures (tid == 0 && 2 * stride == output.length ==> Perm( output [ (output.length - 1) ] , write ));
+ 301           }
+ 302           Matrix_UP = Matrix_UP + seq<seq<int>>{up(Matrix_UP [ (lvl - 1) ],stride,0,k,lvl)};
+ 303           assert indicator < output.length && indicator >= stride ==> (Matrix_UP [ lvl ]) [ indicator ] == (Matrix_UP [ (lvl - 1) ]) [ indicator ] + (Matrix_UP [ (lvl - 1) ]) [ (indicator - stride) ];
+ 304           indicator = 2 * indicator + 1;
+ 305           stride = 2 * stride;
+ 306           lvl = lvl + 1;
+ 307           assert (\forall int i;0 < i && i < lvl;Matrix_UP [ i ] == up(Matrix_UP [ (i - 1) ],stride / ExpTwo(lvl - i),0,k,i));
+ 308           assert stride == ExpTwo(lvl - 1);
+ 309           lemma_exp2_red_mult(lvl);
+ 310           assert ExpTwo(lvl) == 2 * ExpTwo(lvl - 1);
+ 311           assert 2 * stride == ExpTwo(lvl);
+ 312           assert indicator + 1 == ExpTwo(lvl) * (tid + 1);
+ 313           assert indicator + 1 == 2 * stride * (tid + 1);
+ 314         }
+     ---------]
+ 315         assert stride == output.length;
+ 316         assert stride == ExpTwo(lvl - 1);
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 63197 ms
+The final verdict is Fail
+[progress] entire run took 240349 ms

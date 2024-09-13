@@ -1,0 +1,55 @@
+// -*- tab-width:4 ; indent-tabs-mode:nil -*-
+//:: cases SatCheck_Check
+//:: tools silicon
+//:: verdict Pass
+
+class Worker {
+  boolean terminated;
+  int value;
+}
+
+class Test {
+  seq<int> values;
+  
+  gpuopt tile intra 500;
+  given seq<Worker> workers;
+  context_everywhere 0 < N;
+  context_everywhere (| workers |) == N;
+  //context_everywhere N == 2048;
+  requires (\forall int i;0 <= i && i < N;workers [ i ] != null);
+  requires (\forall* int i;0 <= i && i < N;Perm( workers [ i ].terminated , 1 \ 1 ) ** Perm( workers [ i ].value , 1 \ 1 ));
+  requires Perm( values , 1 \ 1 );
+  requires (| values |) == N;
+  requires (\forall int i;0 <= i && i < N;! workers [ i ].terminated);
+  ensures (\forall int i;0 <= i && i < N;workers [ i ] != null);
+  ensures (\forall* int i;0 <= i && i < N;Perm( workers [ i ].terminated , 1 \ 1 ) ** Perm( workers [ i ].value , 1 \ 1 ));
+  ensures Perm( values , 1 \ 1 );
+  ensures (| values |) == N;
+  ensures (\forall int i;0 <= i && i < N;workers [ i ].terminated);
+  ensures (\forall int i;0 <= i && i < N;values [ i ] == 0);
+  void reset(int N){
+    invariant inv (0 < N ** (| workers |) == N ** Perm( values , 1 \ 1 ) ** (| values |) == N ** (\forall int i;0 <= i && i < N;workers [ i ] != null) ** (\forall* int i;0 <= i && i < N;Perm( workers [ i ].terminated , 1 \ 2 ) ** Perm( workers [ i ].value , 1 \ 2 )) ** (\forall int i;0 <= i && i < N;workers [ i ].terminated ==> values [ i ] == workers [ i ].value)){
+      par (int tid = 0 .. N)
+        requires 0 < N;
+        requires Perm( workers [ tid ].terminated , 1 \ 2 );
+        requires Perm( workers [ tid ].value , 1 \ 2 );
+        requires ! workers [ tid ].terminated;
+        ensures 0 < N;
+        ensures Perm( workers [ tid ].terminated , 1 \ 2 );
+        ensures Perm( workers [ tid ].value , 1 \ 2 );
+        ensures workers [ tid ].terminated;
+        ensures workers [ tid ].value == 0;
+        {
+          atomic (inv){
+            {
+              values = values [ tid -> 0 ];
+              workers [ tid ].value = 0;
+              workers [ tid ].terminated = true;
+            }
+          }
+        }
+    }
+  }
+  
+}
+

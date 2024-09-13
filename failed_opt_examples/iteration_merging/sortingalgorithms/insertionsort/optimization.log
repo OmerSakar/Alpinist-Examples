@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/sortingalgorithms/insertionsort/bad_insertion.pvl
+[progress] parsing pass took 9940ms
+[progress] AST conversion pass took 210ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/sortingalgorithms/insertionsort/bad_insertion.pvl successfully
+[progress] Parsed 1 file(s) in: 10150ms
+[progress] [20%] splitCompositeDeclarations took 120 ms
+[progress] [40%] checkTypesJava took 80 ms
+At file Alpinist-Examples-Bad/iteration_merging/sortingalgorithms/insertionsort/bad_insertion.pvl from line 186 column 5 until line 219 column 5: The upperbound of outerLoop is not a constant, but size
+The final verdict is Error
+[progress] entire run took 23462 ms

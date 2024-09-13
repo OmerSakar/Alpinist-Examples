@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/MatrixGrid/bad_MatrixGrid.pvl
+[progress] parsing pass took 18150ms
+[progress] AST conversion pass took 150ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/MatrixGrid/bad_MatrixGrid.pvl successfully
+[progress] Parsed 1 file(s) in: 19150ms
+[progress] [20%] splitCompositeDeclarations took 0 ms
+[progress] [40%] checkTypesJava took 0 ms
+At file Alpinist-Examples-Bad/iteration_merging/MatrixGrid/bad_MatrixGrid.pvl from line 47 column 5 until line 66 column 5: The number of iterations is less than the number of iterations to merge at file Alpinist-Examples-Bad/iteration_merging/MatrixGrid/bad_MatrixGrid.pvl from line 47 column 5 until line 47 column 26
+The final verdict is Error
+[progress] entire run took 49738 ms

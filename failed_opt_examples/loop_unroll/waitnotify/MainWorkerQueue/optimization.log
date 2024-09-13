@@ -1,0 +1,94 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Main.pvl
+[progress] parsing pass took 1210ms
+[progress] AST conversion pass took 80ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Main.pvl successfully
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Queue.pvl
+[progress] parsing pass took 1380ms
+[progress] AST conversion pass took 20ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Queue.pvl successfully
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Worker.pvl
+[progress] parsing pass took 440ms
+[progress] AST conversion pass took 40ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Worker.pvl successfully
+[progress] Parsed 3 file(s) in: 3260ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 0 ms
+[progress] [10%] unrollLoops took 0 ms
+[progress] [13%] checkTypesJava took 0 ms
+[progress] [17%] splitCompositeDeclarations took 10 ms
+[progress] [20%] loadExternalClasses took 0 ms
+[progress] [24%] standardize took 0 ms
+[progress] [27%] encodeLockInvariantProof took 0 ms
+[progress] [31%] encodeForkLockWait took 0 ms
+[progress] [34%] specifyImplicitLoopLabels took 0 ms
+[progress] [37%] propagateAbstractMethodContracts took 0 ms
+[progress] [41%] arrayNullValuesToNone took 0 ms
+[progress] [44%] addRequirementSatCheck took 0 ms
+[progress] [48%] checkAssignInPar took 0 ms
+[progress] [51%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 1530ms
+[progress] AST conversion took 60ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 300ms
+[progress] AST conversion took 0ms
+[progress] [55%] simplify took 2500 ms
+[progress] first parsing pass took 30ms
+[progress] AST conversion took 20ms
+[progress] [58%] optimizeForSilver took 60 ms
+[progress] [62%] desugarArrayOps took 0 ms
+[progress] [65%] flattenNestedExpressions took 0 ms
+[progress] [68%] encodeInheritanceToDomain took 0 ms
+[progress] [72%] importADTsAndRefEncode took 4710 ms
+[progress] [75%] returnTypeToOutParameter took 0 ms
+[progress] [79%] reduceQuantifierNesting took 0 ms
+[progress] [82%] inlinePatternsToTriggers took 0 ms
+[progress] [86%] scaleAllPredicateApplications took 0 ms
+[progress] [89%] collectInnerDeclarations took 0 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 50ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Worker.pvl ===
+  18     int i=0;
+  19 
+        [-----------------------
+  20     gpuopt loop_unroll i 6;
+  21     loop_invariant 0 <= i && i <= 4;
+  22     loop_invariant Value(q1) ** q1!=null;
+  23     loop_invariant Value(q2) ** q2!=null;
+  24     while(i<4){
+  25       tmp=q1.take();
+  26       tmp=tmp+2;
+  27       q2.put(tmp);
+  28       i=i+1;
+  29     }
+     -----]
+  30   }
+  31 }
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/waitnotify/MainWorkerQueue/bad_Worker.pvl ===
+  18     int i=0;
+  19 
+        [-----------------------
+  20     gpuopt loop_unroll i 6;
+  21     loop_invariant 0 <= i && i <= 4;
+  22     loop_invariant Value(q1) ** q1!=null;
+  23     loop_invariant Value(q2) ** q2!=null;
+  24     while(i<4){
+  25       tmp=q1.take();
+  26       tmp=tmp+2;
+  27       q2.put(tmp);
+  28       i=i+1;
+  29     }
+     -----]
+  30   }
+  31 }
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 10524 ms
+The final verdict is Fail
+[progress] entire run took 49544 ms

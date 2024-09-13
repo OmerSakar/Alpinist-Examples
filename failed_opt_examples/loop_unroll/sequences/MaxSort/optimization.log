@@ -1,0 +1,91 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/sequences/MaxSort/bad_max-sort.pvl
+[progress] parsing pass took 8820ms
+[progress] AST conversion pass took 0ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/sequences/MaxSort/bad_max-sort.pvl successfully
+[progress] Parsed 1 file(s) in: 9170ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 350 ms
+[progress] [10%] unrollLoops took 0 ms
+[progress] [13%] checkTypesJava took 0 ms
+[progress] [16%] splitCompositeDeclarations took 0 ms
+[progress] [20%] loadExternalClasses took 0 ms
+[progress] [23%] standardize took 0 ms
+[progress] [26%] specifyImplicitLoopLabels took 0 ms
+[progress] [30%] propagateAbstractMethodContracts took 0 ms
+[progress] [33%] arrayNullValuesToNone took 0 ms
+[progress] [36%] addRequirementSatCheck took 0 ms
+[progress] [40%] desugarADTOperators took 0 ms
+[progress] [43%] checkAssignInPar took 0 ms
+[progress] [46%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 790ms
+[progress] AST conversion took 30ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 240ms
+[progress] AST conversion took 20ms
+[progress] [50%] simplify took 1980 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 30ms
+[progress] [53%] optimizeForSilver took 50 ms
+[progress] [56%] adtOperatorsToFunctions took 0 ms
+[progress] [60%] desugarArrayOps took 0 ms
+[progress] [63%] flattenNestedExpressions took 0 ms
+[progress] [66%] encodeInheritanceToDomain took 0 ms
+[progress] [70%] importADTsAndRefEncode took 0 ms
+[progress] [73%] returnTypeToOutParameter took 0 ms
+[progress] [76%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 0 ms
+[progress] [83%] generateQuantifierTriggers took 0 ms
+[progress] [86%] scaleAllPredicateApplications took 0 ms
+[progress] [90%] collectInnerDeclarations took 0 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 0ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/sequences/MaxSort/bad_max-sort.pvl ===
+  30     seq<int> res = input;
+  31     int right = | res |;
+        [---------------------------
+  32     gpuopt loop_unroll right 1;
+  33     loop_invariant (| input |) == (| res |);
+  34     loop_invariant 0 <= right;
+  35     loop_invariant right <= (| res |);
+  36     loop_invariant right < (| res |) ==> (\forall int m;0 <= m && m < right;res [ right ] >= res [ m ]);
+  37     loop_invariant right < (| res |) ==> (\forall int m;right < m && m < (| res |);res [ right ] <= res [ m ]);
+  38     loop_invariant right < (| res |) ==> MaxSort.sorted(res [ right ..]);
+  39     while(right > 0){
+  40       int maxOfSeq = MaxSort.max(res [.. right ]);
+  41       right = right - 1;
+  42       res = this.swap(res,maxOfSeq,right);
+  43     }
+     -----]
+  44     return res;
+  45   }
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/sequences/MaxSort/bad_max-sort.pvl ===
+  30     seq<int> res = input;
+  31     int right = | res |;
+        [---------------------------
+  32     gpuopt loop_unroll right 1;
+  33     loop_invariant (| input |) == (| res |);
+  34     loop_invariant 0 <= right;
+  35     loop_invariant right <= (| res |);
+  36     loop_invariant right < (| res |) ==> (\forall int m;0 <= m && m < right;res [ right ] >= res [ m ]);
+  37     loop_invariant right < (| res |) ==> (\forall int m;right < m && m < (| res |);res [ right ] <= res [ m ]);
+  38     loop_invariant right < (| res |) ==> MaxSort.sorted(res [ right ..]);
+  39     while(right > 0){
+  40       int maxOfSeq = MaxSort.max(res [.. right ]);
+  41       right = right - 1;
+  42       res = this.swap(res,maxOfSeq,right);
+  43     }
+     -----]
+  44     return res;
+  45   }
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 79575 ms
+The final verdict is Fail
+[progress] entire run took 173673 ms

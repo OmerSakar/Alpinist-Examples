@@ -1,0 +1,107 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/MatrixGrid/bad_MatrixGrid.pvl
+[progress] parsing pass took 17250ms
+[progress] AST conversion pass took 50ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/MatrixGrid/bad_MatrixGrid.pvl successfully
+[progress] Parsed 1 file(s) in: 18120ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 440 ms
+[progress] [10%] unrollLoops took 300 ms
+[progress] [13%] checkTypesJava took 150 ms
+[progress] [16%] splitCompositeDeclarations took 0 ms
+[progress] [20%] loadExternalClasses took 100 ms
+[progress] [23%] standardize took 100 ms
+[progress] [26%] specifyImplicitLoopLabels took 90 ms
+[progress] [30%] propagateAbstractMethodContracts took 110 ms
+[progress] [33%] arrayNullValuesToNone took 70 ms
+[progress] [36%] addRequirementSatCheck took 0 ms
+[progress] [40%] pureMethodsToFunctions took 0 ms
+[progress] [43%] checkAssignInPar took 0 ms
+[progress] [46%] inline took 0 ms
+[progress] [50%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 810ms
+[progress] AST conversion took 30ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 210ms
+[progress] AST conversion took 50ms
+[progress] [53%] simplify took 3400 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 60ms
+[progress] [56%] optimizeForSilver took 90 ms
+[progress] [60%] desugarArrayOps took 0 ms
+[progress] [63%] flattenNestedExpressions took 60 ms
+[progress] [66%] encodeInheritanceToDomain took 0 ms
+[progress] [70%] importADTsAndRefEncode took 10400 ms
+[progress] [73%] returnTypeToOutParameter took 0 ms
+[progress] [76%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 0 ms
+[progress] [83%] generateQuantifierTriggers took 0 ms
+[progress] [86%] scaleAllPredicateApplications took 0 ms
+[progress] [90%] collectInnerDeclarations took 0 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 10ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/MatrixGrid/bad_MatrixGrid.pvl ===
+  45   Grid(int tok,boolean t){
+  46     grid = new int[3][3];
+        [-----------------------
+  47     gpuopt loop_unroll i 6;
+  48     loop_invariant Perm( grid , write );
+  49     loop_invariant grid != null;
+  50     loop_invariant (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , write )));
+  51     loop_invariant 0 <= i;
+  52     loop_invariant i <= 3;
+  53     loop_invariant (\forall int k;0 <= k && k < i;(\forall int l;0 <= l && l < 3;(grid [ k ]) [ l ] == - 1));
+  54     for(int i = 0;i < 3;i ++){
+  55       gpuopt loop_unroll j 6;
+  56       loop_invariant Perm( grid , write );
+  57       loop_invariant grid != null;
+  58       loop_invariant (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , write )));
+  59       loop_invariant 0 <= j;
+  60       loop_invariant j <= 3;
+  61       loop_invariant (\forall int k;0 <= k && k < i;(\forall int l;0 <= l && l < 3;(grid [ k ]) [ l ] == - 1));
+  62       loop_invariant (\forall int l;0 <= l && l < j;(grid [ i ]) [ l ] == - 1);
+  63       for(int j = 0;j < 3;j ++){
+  64         (grid [ i ]) [ j ] = - 1;
+  65       }
+  66     }
+     -----]
+  67     myToken = tok;
+  68     turn = t;
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/MatrixGrid/bad_MatrixGrid.pvl ===
+  45   Grid(int tok,boolean t){
+  46     grid = new int[3][3];
+        [-----------------------
+  47     gpuopt loop_unroll i 6;
+  48     loop_invariant Perm( grid , write );
+  49     loop_invariant grid != null;
+  50     loop_invariant (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , write )));
+  51     loop_invariant 0 <= i;
+  52     loop_invariant i <= 3;
+  53     loop_invariant (\forall int k;0 <= k && k < i;(\forall int l;0 <= l && l < 3;(grid [ k ]) [ l ] == - 1));
+  54     for(int i = 0;i < 3;i ++){
+  55       gpuopt loop_unroll j 6;
+  56       loop_invariant Perm( grid , write );
+  57       loop_invariant grid != null;
+  58       loop_invariant (\forall* int i;0 <= i && i < 3;(\forall* int j;0 <= j && j < 3;Perm( (grid [ i ]) [ j ] , write )));
+  59       loop_invariant 0 <= j;
+  60       loop_invariant j <= 3;
+  61       loop_invariant (\forall int k;0 <= k && k < i;(\forall int l;0 <= l && l < 3;(grid [ k ]) [ l ] == - 1));
+  62       loop_invariant (\forall int l;0 <= l && l < j;(grid [ i ]) [ l ] == - 1);
+  63       for(int j = 0;j < 3;j ++){
+  64         (grid [ i ]) [ j ] = - 1;
+  65       }
+  66     }
+     -----]
+  67     myToken = tok;
+  68     turn = t;
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 63609 ms
+The final verdict is Fail
+[progress] entire run took 172721 ms

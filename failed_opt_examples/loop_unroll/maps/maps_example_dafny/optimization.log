@@ -1,0 +1,84 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl
+[progress] parsing pass took 3330ms
+[progress] AST conversion pass took 0ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl successfully
+[progress] Parsed 1 file(s) in: 3400ms
+[progress] [03%] splitCompositeDeclarations took 40 ms
+[progress] [06%] checkTypesJava took 20 ms
+[progress] [10%] unrollLoops took 400 ms
+[progress] [13%] checkTypesJava took 0 ms
+[progress] [17%] splitCompositeDeclarations took 10 ms
+[progress] [20%] loadExternalClasses took 10 ms
+[progress] [24%] standardize took 10 ms
+[progress] [27%] specifyImplicitLoopLabels took 0 ms
+[progress] [31%] propagateAbstractMethodContracts took 10 ms
+[progress] [34%] arrayNullValuesToNone took 0 ms
+[progress] [37%] addRequirementSatCheck took 0 ms
+[progress] [41%] desugarADTOperators took 0 ms
+[progress] [44%] checkAssignInPar took 0 ms
+[progress] [48%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 470ms
+[progress] AST conversion took 70ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 80ms
+[progress] AST conversion took 0ms
+[progress] [51%] simplify took 930 ms
+[progress] first parsing pass took 10ms
+[progress] AST conversion took 10ms
+[progress] [55%] optimizeForSilver took 30 ms
+[progress] [58%] desugarArrayOps took 0 ms
+[progress] [62%] flattenNestedExpressions took 10 ms
+[progress] [65%] encodeInheritanceToDomain took 10 ms
+[progress] [68%] importADTsAndRefEncode took 2200 ms
+[progress] [72%] returnTypeToOutParameter took 20 ms
+[progress] [75%] reduceQuantifierNesting took 20 ms
+[progress] [79%] inlinePatternsToTriggers took 10 ms
+[progress] [82%] generateQuantifierTriggers took 30 ms
+[progress] [86%] scaleAllPredicateApplications took 10 ms
+[progress] [89%] collectInnerDeclarations took 10 ms
+[progress] [93%] collectDeclarations took 10 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 40ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl ===
+  68     int i = 0;
+  69     int n = 100;
+        [-------------------------
+  70     gpuopt loop_unroll i 305;
+  71     loop_invariant 0 <= i;
+  72     loop_invariant i <= n;
+  73     loop_invariant (\forall int j;j in keysMap( a );a [ j ] == j * j);
+  74     loop_invariant (\forall int k;true;(0 <= k && k < i) == (k in keysMap( a )));
+  75     while(i < n){
+  76       a = buildMap( a , i , i * i );
+  77       i = i + 1;
+  78     }
+     -----]
+  79     assert disjointMap( a , map<int,int>{- 1,2} );
+  80     m3(a);
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl ===
+  68     int i = 0;
+  69     int n = 100;
+        [-------------------------
+  70     gpuopt loop_unroll i 305;
+  71     loop_invariant 0 <= i;
+  72     loop_invariant i <= n;
+  73     loop_invariant (\forall int j;j in keysMap( a );a [ j ] == j * j);
+  74     loop_invariant (\forall int k;true;(0 <= k && k < i) == (k in keysMap( a )));
+  75     while(i < n){
+  76       a = buildMap( a , i , i * i );
+  77       i = i + 1;
+  78     }
+     -----]
+  79     assert disjointMap( a , map<int,int>{- 1,2} );
+  80     m3(a);
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 8373 ms
+The final verdict is Fail
+[progress] entire run took 57005 ms

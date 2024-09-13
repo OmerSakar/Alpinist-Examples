@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/graphs/Reach/bad_reach.pvl
+[progress] parsing pass took 13380ms
+[progress] AST conversion pass took 500ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/graphs/Reach/bad_reach.pvl successfully
+[progress] Parsed 1 file(s) in: 14150ms
+[progress] [20%] splitCompositeDeclarations took 0 ms
+[progress] [40%] checkTypesJava took 1240 ms
+At file Alpinist-Examples-Bad/iteration_merging/graphs/Reach/bad_reach.pvl from line 23 column 5 until line 31 column 5: The upperbound of i is not a constant, but n
+The final verdict is Error
+[progress] entire run took 32290 ms

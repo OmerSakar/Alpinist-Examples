@@ -1,0 +1,95 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/examples/div/bad_loop_unroll_div.pvl
+[progress] parsing pass took 9400ms
+[progress] AST conversion pass took 210ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/examples/div/bad_loop_unroll_div.pvl successfully
+[progress] Parsed 1 file(s) in: 10030ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 0 ms
+[progress] [10%] unrollLoops took 0 ms
+[progress] [13%] checkTypesJava took 0 ms
+[progress] [16%] splitCompositeDeclarations took 0 ms
+[progress] [20%] loadExternalClasses took 0 ms
+[progress] [23%] standardize took 0 ms
+[progress] [26%] specifyImplicitLoopLabels took 0 ms
+[progress] [30%] propagateAbstractMethodContracts took 0 ms
+[progress] [33%] arrayNullValuesToNone took 0 ms
+[progress] [36%] addRequirementSatCheck took 0 ms
+[progress] [40%] desugarADTOperators took 0 ms
+[progress] [43%] checkAssignInPar took 0 ms
+[progress] [46%] propagateInvariants took 0 ms
+[progress] [50%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [53%] simplify took 0 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [56%] optimizeForSilver took 0 ms
+[progress] [60%] desugarArrayOps took 0 ms
+[progress] [63%] flattenNestedExpressions took 0 ms
+[progress] [66%] encodeInheritanceToDomain took 0 ms
+[progress] [70%] importADTsAndRefEncode took 0 ms
+[progress] [73%] returnTypeToOutParameter took 0 ms
+[progress] [76%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 0 ms
+[progress] [83%] generateQuantifierTriggers took 0 ms
+[progress] [86%] scaleAllPredicateApplications took 0 ms
+[progress] [90%] collectInnerDeclarations took 0 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 0ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/examples/div/bad_loop_unroll_div.pvl ===
+  14     int oldI = i;
+  15     int k = 0;
+        [------------------------
+  16     gpuopt loop_unroll i 10;
+  17     loop_invariant 0 <= k;
+  18     loop_invariant i == div(oldI,3,k);
+  19     loop_invariant 0 <= i;
+  20     loop_invariant i <= 243;
+  21     loop_invariant (| res |) == k;
+  22     loop_invariant k == 1 ==> res [ 0 ] / 3 == i;
+  23     loop_invariant (\forall int j;0 <= j && j < (| res |);res [ j ] == div(oldI,3,j));
+  24     loop_invariant (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] / 3 == res [ (j + 1) ]);
+  25     while(i > 1){
+  26       res = res ++ i;
+  27       i = i / 3;
+  28       k = k + 1;
+  29     }
+     -----]
+  30   }
+  31 
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/examples/div/bad_loop_unroll_div.pvl ===
+  14     int oldI = i;
+  15     int k = 0;
+        [------------------------
+  16     gpuopt loop_unroll i 10;
+  17     loop_invariant 0 <= k;
+  18     loop_invariant i == div(oldI,3,k);
+  19     loop_invariant 0 <= i;
+  20     loop_invariant i <= 243;
+  21     loop_invariant (| res |) == k;
+  22     loop_invariant k == 1 ==> res [ 0 ] / 3 == i;
+  23     loop_invariant (\forall int j;0 <= j && j < (| res |);res [ j ] == div(oldI,3,j));
+  24     loop_invariant (\forall int j;0 <= j && j < (| res |) - 1;res [ j ] / 3 == res [ (j + 1) ]);
+  25     while(i > 1){
+  26       res = res ++ i;
+  27       i = i / 3;
+  28       k = k + 1;
+  29     }
+     -----]
+  30   }
+  31 
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 28857 ms
+The final verdict is Fail
+[progress] entire run took 97541 ms

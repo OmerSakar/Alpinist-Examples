@@ -1,0 +1,45 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/kernel_fusion/KernelFusionMultiple/bad_KernelFusionMultiple.pvl
+[progress] parsing pass took 3030ms
+[progress] AST conversion pass took 130ms
+[progress] Read Alpinist-Examples-Bad/kernel_fusion/KernelFusionMultiple/bad_KernelFusionMultiple.pvl successfully
+[progress] Parsed 1 file(s) in: 3190ms
+[progress] [04%] loadExternalClasses took 20 ms
+[progress] [08%] specifyImplicitLoopLabels took 0 ms
+[progress] [12%] propagateAbstractMethodContracts took 20 ms
+[progress] [16%] arrayNullValuesToNone took 10 ms
+[progress] [20%] addRequirementSatCheck took 10 ms
+[progress] [25%] checkAssignInPar took 20 ms
+[progress] [29%] propagateInvariants took 10 ms
+[progress] [33%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] [37%] encodeParallelBlocks took 90 ms
+[progress] first parsing pass took 550ms
+[progress] AST conversion took 50ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 80ms
+[progress] AST conversion took 10ms
+[progress] [41%] simplify took 1870 ms
+[progress] first parsing pass took 50ms
+[progress] AST conversion took 10ms
+[progress] [45%] simplifySums took 170 ms
+[progress] first parsing pass took 10ms
+[progress] AST conversion took 0ms
+[progress] [50%] optimizeForSilver took 30 ms
+[progress] [54%] desugarArrayOps took 10 ms
+[progress] [58%] flattenNestedExpressions took 20 ms
+[progress] [62%] encodeInheritanceToDomain took 20 ms
+[progress] [66%] importADTsAndRefEncode took 1800 ms
+[progress] [70%] returnTypeToOutParameter took 20 ms
+[progress] [75%] reduceQuantifierNesting took 20 ms
+[progress] [79%] inlinePatternsToTriggers took 10 ms
+[progress] [83%] generateQuantifierTriggers took 40 ms
+[progress] [87%] scaleAllPredicateApplications took 10 ms
+[progress] [91%] collectInnerDeclarations took 20 ms
+[progress] [95%] collectDeclarations took 20 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 70ms
+Success!
+[progress] task Viper verification took 10057 ms
+[progress] [100%] applySilicon took 830 ms
+The final verdict is Pass
+[progress] entire run took 34408 ms

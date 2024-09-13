@@ -1,0 +1,109 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/verifythis/2019/Challenge1/bad_challenge1.pvl
+[progress] parsing pass took 22960ms
+[progress] AST conversion pass took 0ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/verifythis/2019/Challenge1/bad_challenge1.pvl successfully
+[progress] Parsed 1 file(s) in: 23340ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 830 ms
+[progress] [09%] unrollLoops took 0 ms
+[progress] [12%] checkTypesJava took 0 ms
+[progress] [15%] splitCompositeDeclarations took 0 ms
+[progress] [18%] loadExternalClasses took 0 ms
+[progress] [21%] standardize took 70 ms
+[progress] [25%] specifyImplicitLoopLabels took 0 ms
+[progress] [28%] propagateAbstractMethodContracts took 50 ms
+[progress] [31%] arrayNullValuesToNone took 0 ms
+[progress] [34%] addRequirementSatCheck took 50 ms
+[progress] [37%] breakReturnToGoto took 40 ms
+[progress] [40%] checkAssignInPar took 0 ms
+[progress] [43%] inline took 50 ms
+[progress] [46%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] [50%] liftGhostCode took 0 ms
+[progress] [53%] inlineWithThenHints took 50 ms
+[progress] first parsing pass took 1130ms
+[progress] AST conversion took 0ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 170ms
+[progress] AST conversion took 20ms
+[progress] [56%] simplify took 1600 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [59%] optimizeForSilver took 0 ms
+[progress] [62%] desugarArrayOps took 0 ms
+[progress] [65%] flattenNestedExpressions took 0 ms
+[progress] [68%] encodeInheritanceToDomain took 0 ms
+[progress] [71%] importADTsAndRefEncode took 0 ms
+[progress] [75%] returnTypeToOutParameter took 0 ms
+[progress] [78%] reduceQuantifierNesting took 0 ms
+[progress] [81%] inlinePatternsToTriggers took 0 ms
+[progress] [84%] generateQuantifierTriggers took 0 ms
+[progress] [87%] scaleAllPredicateApplications took 0 ms
+[progress] [90%] collectInnerDeclarations took 0 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 200ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/verifythis/2019/Challenge1/bad_challenge1.pvl ===
+ 344     seq<seq<int>> newsegments = seq<seq<int>>{};
+ 345     int x = 0;
+        [-----------------------
+ 346     gpuopt loop_unroll x 1;
+ 347     loop_invariant 0 <= x;
+ 348     loop_invariant x <= (| segments |);
+ 349     loop_invariant (| dir |) == (| segments |);
+ 350     loop_invariant flatten(segments) == xs;
+ 351     loop_invariant (\forall int i;0 <= i && i < (| segments |);0 < (| segments [ i ] |));
+ 352     loop_invariant (\forall int i;0 <= i && i < (| segments |) && dir [ i ];incr(segments [ i ]));
+ 353     loop_invariant (\forall int i;0 <= i && i < (| segments |) && ! dir [ i ];decr(segments [ i ]));
+ 354     loop_invariant (| newsegments |) == x;
+ 355     loop_invariant (\forall int i;0 <= i && i < x;incr(newsegments [ i ]));
+ 356     loop_invariant (\forall int i;0 <= i && i < x;tobag(newsegments [ i ]) == tobag(segments [ i ]));
+ 357     while(x < (| segments |)){
+ 358       if (dir [ x ]) {
+ 359         newsegments = newsegments + seq<seq<int>>{segments [ x ]};
+ 360       } else {
+ 361         seq<int> tmp = reverse(segments [ x ]);
+ 362         newsegments = newsegments + seq<seq<int>>{tmp};
+ 363       }
+ 364       x = x + 1;
+ 365     }
+     -----]
+ 366     lemma_flatten_tobag(newsegments,segments);
+ 367     assert tobag(flatten(newsegments)) == tobag(xs);
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/verifythis/2019/Challenge1/bad_challenge1.pvl ===
+ 344     seq<seq<int>> newsegments = seq<seq<int>>{};
+ 345     int x = 0;
+        [-----------------------
+ 346     gpuopt loop_unroll x 1;
+ 347     loop_invariant 0 <= x;
+ 348     loop_invariant x <= (| segments |);
+ 349     loop_invariant (| dir |) == (| segments |);
+ 350     loop_invariant flatten(segments) == xs;
+ 351     loop_invariant (\forall int i;0 <= i && i < (| segments |);0 < (| segments [ i ] |));
+ 352     loop_invariant (\forall int i;0 <= i && i < (| segments |) && dir [ i ];incr(segments [ i ]));
+ 353     loop_invariant (\forall int i;0 <= i && i < (| segments |) && ! dir [ i ];decr(segments [ i ]));
+ 354     loop_invariant (| newsegments |) == x;
+ 355     loop_invariant (\forall int i;0 <= i && i < x;incr(newsegments [ i ]));
+ 356     loop_invariant (\forall int i;0 <= i && i < x;tobag(newsegments [ i ]) == tobag(segments [ i ]));
+ 357     while(x < (| segments |)){
+ 358       if (dir [ x ]) {
+ 359         newsegments = newsegments + seq<seq<int>>{segments [ x ]};
+ 360       } else {
+ 361         seq<int> tmp = reverse(segments [ x ]);
+ 362         newsegments = newsegments + seq<seq<int>>{tmp};
+ 363       }
+ 364       x = x + 1;
+ 365     }
+     -----]
+ 366     lemma_flatten_tobag(newsegments,segments);
+ 367     assert tobag(flatten(newsegments)) == tobag(xs);
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 83044 ms
+The final verdict is Fail
+[progress] entire run took 278004 ms

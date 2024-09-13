@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/tiling/demo/demo2/bad_demo2.pvl
+[progress] parsing pass took 1150ms
+[progress] AST conversion pass took 90ms
+[progress] Read Alpinist-Examples-Bad/tiling/demo/demo2/bad_demo2.pvl successfully
+[progress] Parsed 1 file(s) in: 1260ms
+[progress] [20%] splitCompositeDeclarations took 40 ms
+[progress] [40%] checkTypesJava took 10 ms
+At file Alpinist-Examples-Bad/tiling/demo/demo2/bad_demo2.pvl from line 22 column 3 until line 36 column 3: Could not determine that 8 is less than the upperbound for the thread id tid. Please specify in the contract of the method that the tile size 8 is less than the upperbound for tid
+The final verdict is Error
+[progress] entire run took 4442 ms

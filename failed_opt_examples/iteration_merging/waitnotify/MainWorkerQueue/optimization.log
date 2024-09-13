@@ -1,0 +1,19 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Main.pvl
+[progress] parsing pass took 1280ms
+[progress] AST conversion pass took 180ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Main.pvl successfully
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Queue.pvl
+[progress] parsing pass took 990ms
+[progress] AST conversion pass took 40ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Queue.pvl successfully
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Worker.pvl
+[progress] parsing pass took 780ms
+[progress] AST conversion pass took 10ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Worker.pvl successfully
+[progress] Parsed 3 file(s) in: 3410ms
+[progress] [20%] splitCompositeDeclarations took 1070 ms
+[progress] [40%] checkTypesJava took 100 ms
+At file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Worker.pvl from line 20 column 5 until line 29 column 5: The number of iterations is less than the number of iterations to merge at file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Worker.pvl from line 20 column 5 until line 20 column 26
+The final verdict is Error
+[progress] entire run took 22410 ms

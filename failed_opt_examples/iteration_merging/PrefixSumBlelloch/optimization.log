@@ -1,0 +1,12 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/PrefixSumBlelloch/bad_Blelloch.pvl
+[progress] parsing pass took 15840ms
+[progress] AST conversion pass took 240ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/PrefixSumBlelloch/bad_Blelloch.pvl successfully
+[progress] Parsed 1 file(s) in: 16090ms
+[progress] [20%] splitCompositeDeclarations took 140 ms
+[progress] [40%] checkTypesJava took 100 ms
+At file Alpinist-Examples-Bad/iteration_merging/PrefixSumBlelloch/bad_Blelloch.pvl from line 226 column 9 until line 315 column 9: The upperbound of stride is not a constant, but output;
+.length
+The final verdict is Error
+[progress] entire run took 38369 ms

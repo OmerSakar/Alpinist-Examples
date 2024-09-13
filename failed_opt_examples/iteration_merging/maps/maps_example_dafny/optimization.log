@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl
+[progress] parsing pass took 5700ms
+[progress] AST conversion pass took 270ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl successfully
+[progress] Parsed 1 file(s) in: 6110ms
+[progress] [20%] splitCompositeDeclarations took 0 ms
+[progress] [40%] checkTypesJava took 310 ms
+At file Alpinist-Examples-Bad/iteration_merging/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl from line 70 column 5 until line 78 column 5: The number of iterations is less than the number of iterations to merge at file Alpinist-Examples-Bad/iteration_merging/maps/maps_example_dafny/bad_maps_example_from_dafny.pvl from line 70 column 5 until line 70 column 28
+The final verdict is Error
+[progress] entire run took 33697 ms

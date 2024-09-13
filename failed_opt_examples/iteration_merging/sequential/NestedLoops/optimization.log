@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/sequential/NestedLoops/bad_nested-loops.pvl
+[progress] parsing pass took 990ms
+[progress] AST conversion pass took 110ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/sequential/NestedLoops/bad_nested-loops.pvl successfully
+[progress] Parsed 1 file(s) in: 1110ms
+[progress] [20%] splitCompositeDeclarations took 40 ms
+[progress] [40%] checkTypesJava took 0 ms
+At file Alpinist-Examples-Bad/iteration_merging/sequential/NestedLoops/bad_nested-loops.pvl from line 17 column 5 until line 34 column 5: The upperbound of i is not a constant, but n
+The final verdict is Error
+[progress] entire run took 3945 ms

@@ -1,0 +1,40 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/examples/iter_merge_plus/bad_iter_merge_plus.pvl
+[progress] parsing pass took 4740ms
+[progress] AST conversion pass took 160ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/examples/iter_merge_plus/bad_iter_merge_plus.pvl successfully
+[progress] Parsed 1 file(s) in: 5350ms
+[progress] [04%] splitCompositeDeclarations took 0 ms
+[progress] [09%] loadExternalClasses took 0 ms
+[progress] [14%] specifyImplicitLoopLabels took 0 ms
+[progress] [19%] propagateAbstractMethodContracts took 0 ms
+[progress] [23%] arrayNullValuesToNone took 0 ms
+[progress] [28%] addRequirementSatCheck took 0 ms
+[progress] [33%] checkAssignInPar took 0 ms
+[progress] [38%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [42%] simplify took 0 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [47%] optimizeForSilver took 0 ms
+[progress] [52%] desugarArrayOps took 0 ms
+[progress] [57%] flattenNestedExpressions took 0 ms
+[progress] [61%] encodeInheritanceToDomain took 0 ms
+[progress] [66%] importADTsAndRefEncode took 0 ms
+[progress] [71%] returnTypeToOutParameter took 0 ms
+[progress] [76%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 0 ms
+[progress] [85%] scaleAllPredicateApplications took 0 ms
+[progress] [90%] collectInnerDeclarations took 0 ms
+[progress] [95%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 0ms
+Success!
+[progress] task Viper verification took 29912 ms
+[progress] [100%] applySilicon took 2210 ms
+The final verdict is Pass
+[progress] entire run took 62784 ms

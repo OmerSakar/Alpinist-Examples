@@ -1,0 +1,139 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/graphs/Reach/bad_reach.pvl
+[progress] parsing pass took 4620ms
+[progress] AST conversion pass took 40ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/graphs/Reach/bad_reach.pvl successfully
+[progress] Parsed 1 file(s) in: 4880ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 0 ms
+[progress] [09%] unrollLoops took 80 ms
+[progress] [12%] checkTypesJava took 0 ms
+[progress] [15%] splitCompositeDeclarations took 0 ms
+[progress] [18%] loadExternalClasses took 0 ms
+[progress] [21%] standardize took 0 ms
+[progress] [25%] specifyImplicitLoopLabels took 0 ms
+[progress] [28%] propagateAbstractMethodContracts took 0 ms
+[progress] [31%] arrayNullValuesToNone took 0 ms
+[progress] [34%] addRequirementSatCheck took 0 ms
+[progress] [37%] breakReturnToGoto took 0 ms
+[progress] [40%] checkAssignInPar took 0 ms
+[progress] [43%] propagateInvariants took 0 ms
+[progress] [46%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] [50%] liftGhostCode took 0 ms
+[progress] [53%] inlineWithThenHints took 0 ms
+[progress] first parsing pass took 640ms
+[progress] AST conversion took 30ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 120ms
+[progress] AST conversion took 10ms
+[progress] [56%] simplify took 1460 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 30ms
+[progress] [59%] optimizeForSilver took 30 ms
+[progress] [62%] desugarArrayOps took 0 ms
+[progress] [65%] flattenNestedExpressions took 10 ms
+[progress] [68%] encodeInheritanceToDomain took 0 ms
+[progress] [71%] importADTsAndRefEncode took 220 ms
+[progress] [75%] returnTypeToOutParameter took 20 ms
+[progress] [78%] reduceQuantifierNesting took 0 ms
+[progress] [81%] inlinePatternsToTriggers took 0 ms
+[progress] [84%] generateQuantifierTriggers took 0 ms
+[progress] [87%] scaleAllPredicateApplications took 0 ms
+[progress] [90%] collectInnerDeclarations took 20 ms
+[progress] [93%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 30ms
+Errors! (2)
+=== Alpinist-Examples-Bad/loop_unroll/graphs/Reach/bad_reach.pvl ===
+  20     boolean[] marked = new boolean[n];
+  21     int i = 0;
+        [-----------------------
+  22     gpuopt loop_unroll i 3;
+  23     loop_invariant 0 <= i;
+  24     loop_invariant i <= n;
+  25     loop_invariant (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+  26     loop_invariant (\forall int j;0 <= j && j < i;! marked [ j ]);
+  27     while(i < n){
+  28       marked [ i ] = false;
+  29       i = i + 1;
+  30     }
+     -----]
+  31     return explore(n,G,marked,x,y)with {
+  32       P = P;
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/graphs/Reach/bad_reach.pvl ===
+  20     boolean[] marked = new boolean[n];
+  21     int i = 0;
+        [-----------------------
+  22     gpuopt loop_unroll i 3;
+  23     loop_invariant 0 <= i;
+  24     loop_invariant i <= n;
+  25     loop_invariant (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+  26     loop_invariant (\forall int j;0 <= j && j < i;! marked [ j ]);
+  27     while(i < n){
+  28       marked [ i ] = false;
+  29       i = i + 1;
+  30     }
+     -----]
+  31     return explore(n,G,marked,x,y)with {
+  32       P = P;
+-----------------------------------------
+  caused by
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/graphs/Reach/bad_reach.pvl ===
+  55     marked [ x ] = true;
+  56     int next = 0;
+        [--------------------------
+  57     gpuopt loop_unroll next 5;
+  58     loop_invariant 0 <= next;
+  59     loop_invariant next <= n;
+  60     loop_invariant (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+  61     while(next < n){
+  62       if ((G [ x ]) [ next ] && ! marked [ next ]) {
+  63         boolean rec = explore(n,G,marked,next,y)with {
+  64           P = P;
+  65         };
+  66         if (rec) {
+  67           P = seq<int>{x} + P;
+  68           return true;
+  69         }
+  70       }
+  71       next = next + 1;
+  72     }
+     -----]
+  73     return false;
+  74   }
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/graphs/Reach/bad_reach.pvl ===
+  55     marked [ x ] = true;
+  56     int next = 0;
+        [--------------------------
+  57     gpuopt loop_unroll next 5;
+  58     loop_invariant 0 <= next;
+  59     loop_invariant next <= n;
+  60     loop_invariant (\forall* int j;0 <= j && j < n;Perm( marked [ j ] , write ));
+  61     while(next < n){
+  62       if ((G [ x ]) [ next ] && ! marked [ next ]) {
+  63         boolean rec = explore(n,G,marked,next,y)with {
+  64           P = P;
+  65         };
+  66         if (rec) {
+  67           P = seq<int>{x} + P;
+  68           return true;
+  69         }
+  70       }
+  71       next = next + 1;
+  72     }
+     -----]
+  73     return false;
+  74   }
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 39308 ms
+The final verdict is Fail
+[progress] entire run took 114229 ms

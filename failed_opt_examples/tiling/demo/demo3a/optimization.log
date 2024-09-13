@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/tiling/demo/demo3a/bad_demo3a.pvl
+[progress] parsing pass took 2910ms
+[progress] AST conversion pass took 100ms
+[progress] Read Alpinist-Examples-Bad/tiling/demo/demo3a/bad_demo3a.pvl successfully
+[progress] Parsed 1 file(s) in: 3010ms
+[progress] [20%] splitCompositeDeclarations took 40 ms
+[progress] [40%] checkTypesJava took 0 ms
+At file Alpinist-Examples-Bad/tiling/demo/demo3a/bad_demo3a.pvl from line 9 column 3 until line 29 column 3: Could not determine that 4096 is less than the upperbound for the thread id tid. Please specify in the contract of the method that the tile size 4096 is less than the upperbound for tid
+The final verdict is Error
+[progress] entire run took 9277 ms

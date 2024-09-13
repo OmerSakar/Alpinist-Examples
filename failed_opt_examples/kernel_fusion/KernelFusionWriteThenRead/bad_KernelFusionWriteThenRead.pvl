@@ -1,0 +1,66 @@
+// -*- tab-width:2 ; indent-tabs-mode:nil -*-
+//:: cases KernelFusionWriteThenRead
+//:: tools silicon
+//:: verdict Pass
+
+class HostSyncRemedyOpt1 {
+
+  context_everywhere a != null;
+  context_everywhere b != null;
+  context_everywhere c != null;
+  context_everywhere a.length == b.length;
+  context_everywhere a.length == c.length;
+  //context_everywhere a.length == 2048;
+  //context_everywhere b.length == 2048;
+  //context_everywhere c.length == 2048;
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 \ 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 1 ));
+  requires (\forall* int i;i >= 0 && i < a.length;Perm( c [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( a [ i ] , 1 \ 1 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( b [ i ] , 1 \ 2 ));
+  ensures (\forall* int i;i >= 0 && i < a.length;Perm( c [ i ] , 1 \ 1 ));
+  ensures (\forall int i;i >= 0 && i < a.length;a [ i ] == b [ i ]);
+  void host_Sync_Remedy_Optimized(int[] a,int[] b,int[] c){
+    gpuopt fuse 2 1;
+    par kernel1(int tid = 0 .. a.length)
+      requires (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 2 ));
+      requires (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+      requires Perm( b [ tid ] , 1 \ 1 );
+      requires Perm( c [ tid ] , 1 \ 1 );
+      ensures Perm( c [ tid ] , 1 \ 1 );
+      ensures Perm( a [ tid ] , 1 \ 2 );
+      ensures Perm( b [ tid ] , 1 \ 2 );
+      ensures a [ tid ] == c [ tid ];
+      {
+        if (tid != a.length - 1) {
+          b [ tid ] = a [ (tid + 1) ];
+        } else {
+          b [ tid ] = a [ 0 ];
+        }
+        barrier(kernel1)
+          requires (tid != a.length - 1 ==> Perm( a [ (tid + 1) ] , 1 \ 2 ));
+          requires (tid == a.length - 1 ==> Perm( a [ 0 ] , 1 \ 2 ));
+          requires Perm( b [ tid ] , 1 \ 1 );
+          requires (tid != a.length - 1 ==> b [ tid ] == a [ (tid + 1) ]);
+          requires (tid == a.length - 1 ==> b [ tid ] == a [ 0 ]);
+          requires Perm( c [ tid ] , 1 \ 1 );
+          ensures Perm( c [ tid ] , 1 \ 1 );
+          ensures Perm( a [ tid ] , 1 \ 2 );
+          ensures Perm( b [ tid ] , 1 \ 2 );
+        {
+        }
+        c [ tid ] = a [ tid ];
+      }
+    par kernel2(int tid = 0 .. a.length)
+      requires Perm( b [ tid ] , 1 \ 2 );
+      requires Perm( a [ tid ] , 1 \ 1 );
+      ensures Perm( b [ tid ] , 1 \ 2 );
+      ensures Perm( a [ tid ] , 1 \ 1 );
+      ensures b [ tid ] == a [ tid ];
+      {
+        a [ tid ] = b [ tid ];
+      }
+  }
+
+}
+

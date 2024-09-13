@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/manual/Loop/bad_loop.pvl
+[progress] parsing pass took 1280ms
+[progress] AST conversion pass took 80ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/manual/Loop/bad_loop.pvl successfully
+[progress] Parsed 1 file(s) in: 1360ms
+[progress] [20%] splitCompositeDeclarations took 20 ms
+[progress] [40%] checkTypesJava took 20 ms
+At file Alpinist-Examples-Bad/iteration_merging/manual/Loop/bad_loop.pvl from line 21 column 5 until line 30 column 5: The upperbound of i is not a constant, but y
+The final verdict is Error
+[progress] entire run took 4645 ms

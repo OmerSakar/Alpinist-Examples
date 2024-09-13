@@ -1,0 +1,51 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Main.pvl
+[progress] parsing pass took 4930ms
+[progress] AST conversion pass took 310ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Main.pvl successfully
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Queue.pvl
+[progress] parsing pass took 910ms
+[progress] AST conversion pass took 40ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Queue.pvl successfully
+[progress] Parsing pvl file Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Worker.pvl
+[progress] parsing pass took 680ms
+[progress] AST conversion pass took 0ms
+[progress] Read Alpinist-Examples-Bad/iteration_merging/waitnotify/MainWorkerQueue/bad_Worker.pvl successfully
+[progress] Parsed 3 file(s) in: 7250ms
+[progress] [04%] splitCompositeDeclarations took 0 ms
+[progress] [08%] loadExternalClasses took 0 ms
+[progress] [12%] standardize took 260 ms
+[progress] [16%] encodeLockInvariantProof took 0 ms
+[progress] [20%] encodeForkLockWait took 0 ms
+[progress] [25%] specifyImplicitLoopLabels took 0 ms
+[progress] [29%] propagateAbstractMethodContracts took 0 ms
+[progress] [33%] arrayNullValuesToNone took 0 ms
+[progress] [37%] addRequirementSatCheck took 60 ms
+[progress] [41%] checkAssignInPar took 0 ms
+[progress] [45%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [50%] simplify took 0 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 0ms
+[progress] [54%] optimizeForSilver took 0 ms
+[progress] [58%] desugarArrayOps took 0 ms
+[progress] [62%] flattenNestedExpressions took 0 ms
+[progress] [66%] encodeInheritanceToDomain took 0 ms
+[progress] [70%] importADTsAndRefEncode took 0 ms
+[progress] [75%] returnTypeToOutParameter took 0 ms
+[progress] [79%] reduceQuantifierNesting took 0 ms
+[progress] [83%] inlinePatternsToTriggers took 0 ms
+[progress] [87%] scaleAllPredicateApplications took 0 ms
+[progress] [91%] collectInnerDeclarations took 0 ms
+[progress] [95%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 0ms
+Success!
+[progress] task Viper verification took 26206 ms
+[progress] [100%] applySilicon took 0 ms
+The final verdict is Pass
+[progress] entire run took 90366 ms

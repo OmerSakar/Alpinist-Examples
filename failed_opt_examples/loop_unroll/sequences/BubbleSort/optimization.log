@@ -1,0 +1,93 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/sequences/BubbleSort/bad_bubble-sort.pvl
+[progress] parsing pass took 8310ms
+[progress] AST conversion pass took 30ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/sequences/BubbleSort/bad_bubble-sort.pvl successfully
+[progress] Parsed 1 file(s) in: 8820ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [07%] checkTypesJava took 0 ms
+[progress] [10%] unrollLoops took 280 ms
+[progress] [14%] checkTypesJava took 0 ms
+[progress] [17%] splitCompositeDeclarations took 60 ms
+[progress] [21%] loadExternalClasses took 0 ms
+[progress] [25%] specifyImplicitLoopLabels took 0 ms
+[progress] [28%] propagateAbstractMethodContracts took 50 ms
+[progress] [32%] arrayNullValuesToNone took 0 ms
+[progress] [35%] addRequirementSatCheck took 0 ms
+[progress] [39%] desugarADTOperators took 0 ms
+[progress] [42%] checkAssignInPar took 0 ms
+[progress] [46%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 890ms
+[progress] AST conversion took 90ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 230ms
+[progress] AST conversion took 50ms
+[progress] [50%] simplify took 2260 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 40ms
+[progress] [53%] optimizeForSilver took 50 ms
+[progress] [57%] desugarArrayOps took 0 ms
+[progress] [60%] flattenNestedExpressions took 30 ms
+[progress] [64%] encodeInheritanceToDomain took 10 ms
+[progress] [67%] importADTsAndRefEncode took 20 ms
+[progress] [71%] returnTypeToOutParameter took 20 ms
+[progress] [75%] reduceQuantifierNesting took 0 ms
+[progress] [78%] inlinePatternsToTriggers took 0 ms
+[progress] [82%] generateQuantifierTriggers took 0 ms
+[progress] [85%] scaleAllPredicateApplications took 0 ms
+[progress] [89%] collectInnerDeclarations took 0 ms
+[progress] [92%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 170ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/sequences/BubbleSort/bad_bubble-sort.pvl ===
+  18     while(lastUnsorted > 0){
+  19       int i = 0;
+          [-----------------------
+  20       gpuopt loop_unroll i 4;
+  21       loop_invariant 0 <= lastUnsorted;
+  22       loop_invariant lastUnsorted < (| out |);
+  23       loop_invariant 0 <= i;
+  24       loop_invariant i <= lastUnsorted;
+  25       loop_invariant BubbleSort.sorted(out [ lastUnsorted ..]);
+  26       loop_invariant BubbleSort.correct(out,lastUnsorted);
+  27       loop_invariant (\forall int k;0 <= k && k < i;out [ k ] <= out [ i ]);
+  28       while(i < lastUnsorted){
+  29         if (out [ i ] > out [ (i + 1) ]) {
+  30           out = this.swap(out,i,i + 1);
+  31         }
+  32         i = i + 1;
+  33       }
+     -------]
+  34       lastUnsorted = lastUnsorted - 1;
+  35     }
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/sequences/BubbleSort/bad_bubble-sort.pvl ===
+  18     while(lastUnsorted > 0){
+  19       int i = 0;
+          [-----------------------
+  20       gpuopt loop_unroll i 4;
+  21       loop_invariant 0 <= lastUnsorted;
+  22       loop_invariant lastUnsorted < (| out |);
+  23       loop_invariant 0 <= i;
+  24       loop_invariant i <= lastUnsorted;
+  25       loop_invariant BubbleSort.sorted(out [ lastUnsorted ..]);
+  26       loop_invariant BubbleSort.correct(out,lastUnsorted);
+  27       loop_invariant (\forall int k;0 <= k && k < i;out [ k ] <= out [ i ]);
+  28       while(i < lastUnsorted){
+  29         if (out [ i ] > out [ (i + 1) ]) {
+  30           out = this.swap(out,i,i + 1);
+  31         }
+  32         i = i + 1;
+  33       }
+     -------]
+  34       lastUnsorted = lastUnsorted - 1;
+  35     }
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 42788 ms
+The final verdict is Fail
+[progress] entire run took 94117 ms

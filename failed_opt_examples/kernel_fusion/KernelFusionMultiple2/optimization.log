@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/kernel_fusion/KernelFusionMultiple2/bad_KernelFusionMultiple2.pvl
+[progress] parsing pass took 3640ms
+[progress] AST conversion pass took 130ms
+[progress] Read Alpinist-Examples-Bad/kernel_fusion/KernelFusionMultiple2/bad_KernelFusionMultiple2.pvl successfully
+[progress] Parsed 1 file(s) in: 3780ms
+[progress] [20%] splitCompositeDeclarations took 50 ms
+[progress] [40%] checkTypesJava took 60 ms
+At file Alpinist-Examples-Bad/kernel_fusion/KernelFusionMultiple2/bad_KernelFusionMultiple2.pvl from line 24 column 51 until line 84 column 3: Could not find concrete value for the length of a
+The final verdict is Error
+[progress] entire run took 11623 ms

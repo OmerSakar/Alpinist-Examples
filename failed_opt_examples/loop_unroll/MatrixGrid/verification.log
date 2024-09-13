@@ -1,0 +1,44 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/MatrixGrid/bad_MatrixGrid.pvl
+[progress] parsing pass took 12260ms
+[progress] AST conversion pass took 230ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/MatrixGrid/bad_MatrixGrid.pvl successfully
+[progress] Parsed 1 file(s) in: 12970ms
+[progress] [04%] splitCompositeDeclarations took 0 ms
+[progress] [08%] loadExternalClasses took 0 ms
+[progress] [12%] standardize took 0 ms
+[progress] [16%] specifyImplicitLoopLabels took 0 ms
+[progress] [20%] propagateAbstractMethodContracts took 230 ms
+[progress] [24%] arrayNullValuesToNone took 230 ms
+[progress] [28%] addRequirementSatCheck took 170 ms
+[progress] [32%] pureMethodsToFunctions took 0 ms
+[progress] [36%] checkAssignInPar took 0 ms
+[progress] [40%] inline took 150 ms
+[progress] [44%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 2050ms
+[progress] AST conversion took 190ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 280ms
+[progress] AST conversion took 40ms
+[progress] [48%] simplify took 6000 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 100ms
+[progress] [52%] optimizeForSilver took 140 ms
+[progress] [56%] desugarArrayOps took 10 ms
+[progress] [60%] flattenNestedExpressions took 20 ms
+[progress] [64%] encodeInheritanceToDomain took 0 ms
+[progress] [68%] importADTsAndRefEncode took 11750 ms
+[progress] [72%] returnTypeToOutParameter took 0 ms
+[progress] [76%] reduceQuantifierNesting took 0 ms
+[progress] [80%] inlinePatternsToTriggers took 130 ms
+[progress] [84%] generateQuantifierTriggers took 20 ms
+[progress] [88%] scaleAllPredicateApplications took 0 ms
+[progress] [92%] collectInnerDeclarations took 140 ms
+[progress] [96%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 230ms
+Success!
+[progress] task Viper verification took 82458 ms
+[progress] [100%] applySilicon took 10920 ms
+The final verdict is Pass
+[progress] entire run took 199137 ms

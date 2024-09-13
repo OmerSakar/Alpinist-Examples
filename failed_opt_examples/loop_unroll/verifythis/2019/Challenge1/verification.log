@@ -1,0 +1,46 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/verifythis/2019/Challenge1/bad_challenge1.pvl
+[progress] parsing pass took 50110ms
+[progress] AST conversion pass took 2440ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/verifythis/2019/Challenge1/bad_challenge1.pvl successfully
+[progress] Parsed 1 file(s) in: 52610ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [07%] loadExternalClasses took 610 ms
+[progress] [11%] standardize took 370 ms
+[progress] [14%] specifyImplicitLoopLabels took 0 ms
+[progress] [18%] propagateAbstractMethodContracts took 0 ms
+[progress] [22%] arrayNullValuesToNone took 0 ms
+[progress] [25%] addRequirementSatCheck took 0 ms
+[progress] [29%] breakReturnToGoto took 280 ms
+[progress] [33%] checkAssignInPar took 0 ms
+[progress] [37%] inline took 260 ms
+[progress] [40%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] [44%] liftGhostCode took 240 ms
+[progress] [48%] inlineWithThenHints took 0 ms
+[progress] first parsing pass took 2680ms
+[progress] AST conversion took 70ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 460ms
+[progress] AST conversion took 80ms
+[progress] [51%] simplify took 8830 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 70ms
+[progress] [55%] optimizeForSilver took 90 ms
+[progress] [59%] desugarArrayOps took 330 ms
+[progress] [62%] flattenNestedExpressions took 20 ms
+[progress] [66%] encodeInheritanceToDomain took 220 ms
+[progress] [70%] importADTsAndRefEncode took 0 ms
+[progress] [74%] returnTypeToOutParameter took 160 ms
+[progress] [77%] reduceQuantifierNesting took 0 ms
+[progress] [81%] inlinePatternsToTriggers took 80 ms
+[progress] [85%] generateQuantifierTriggers took 460 ms
+[progress] [88%] scaleAllPredicateApplications took 0 ms
+[progress] [92%] collectInnerDeclarations took 330 ms
+[progress] [96%] collectDeclarations took 200 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 760ms
+Success!
+[progress] task Viper verification took 129856 ms
+[progress] [100%] applySilicon took 19360 ms
+The final verdict is Pass
+[progress] entire run took 361295 ms

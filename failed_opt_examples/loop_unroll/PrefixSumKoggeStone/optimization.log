@@ -1,0 +1,167 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/PrefixSumKoggeStone/bad_Kogge-Stone.pvl
+[progress] parsing pass took 14290ms
+[progress] AST conversion pass took 770ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/PrefixSumKoggeStone/bad_Kogge-Stone.pvl successfully
+[progress] Parsed 1 file(s) in: 15390ms
+[progress] [03%] splitCompositeDeclarations took 0 ms
+[progress] [06%] checkTypesJava took 0 ms
+[progress] [09%] unrollLoops took 0 ms
+[progress] [12%] checkTypesJava took 0 ms
+[progress] [15%] splitCompositeDeclarations took 0 ms
+[progress] [18%] loadExternalClasses took 0 ms
+[progress] [21%] standardize took 0 ms
+[progress] [25%] specifyImplicitLoopLabels took 0 ms
+[progress] [28%] propagateAbstractMethodContracts took 0 ms
+[progress] [31%] arrayNullValuesToNone took 0 ms
+[progress] [34%] addRequirementSatCheck took 0 ms
+[progress] [37%] checkAssignInPar took 0 ms
+[progress] [40%] propagateInvariants took 0 ms
+[progress] [43%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] [46%] liftGhostCode took 70 ms
+[progress] [50%] encodeParallelBlocks took 50 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 30ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 280ms
+[progress] AST conversion took 0ms
+[progress] [53%] simplify took 2170 ms
+[progress] first parsing pass took 70ms
+[progress] AST conversion took 10ms
+[progress] [56%] simplifySums took 90 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 50ms
+[progress] [59%] optimizeForSilver took 60 ms
+[progress] [62%] desugarArrayOps took 0 ms
+[progress] [65%] flattenNestedExpressions took 60 ms
+[progress] [68%] encodeInheritanceToDomain took 0 ms
+[progress] [71%] importADTsAndRefEncode took 8960 ms
+[progress] [75%] returnTypeToOutParameter took 30 ms
+[progress] [78%] reduceQuantifierNesting took 20 ms
+[progress] [81%] inlinePatternsToTriggers took 20 ms
+[progress] [84%] generateQuantifierTriggers took 30 ms
+[progress] [87%] scaleAllPredicateApplications took 20 ms
+[progress] [90%] collectInnerDeclarations took 0 ms
+[progress] [93%] collectDeclarations took 140 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 10ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/PrefixSumKoggeStone/bad_Kogge-Stone.pvl ===
+ 194         lemma_intsum_Take(temp_seq,tid);
+ 195         assert tid < offset ==> output [ tid ] == temp_seq [ tid ];
+            [----------------------------
+ 196         gpuopt loop_unroll offset 1;
+ 197         loop_invariant offset >= 1;
+ 198         loop_invariant (| temp_seq |) == (| out |);
+ 199         loop_invariant offset < 2 * output.length;
+ 200         loop_invariant Perm( output [ tid ] , read );
+ 201         loop_invariant tid >= offset ==> Perm( output [ (tid - offset) ] , read );
+ 202         loop_invariant temp_seq [ tid ] == intsum(Take(out,tid + 1)) - intsum(Take(out,tid + 1 - offset));
+ 203         loop_invariant tid < offset ==> temp_seq [ tid ] == intsum(Take(out,tid + 1));
+ 204         loop_invariant tid < offset ==> temp_seq [ tid ] == get(psum2(out),tid);
+ 205         loop_invariant temp_seq [ tid ] == get(partial_prefixsum(out,0,offset),tid);
+ 206         loop_invariant tid < offset ==> output [ tid ] == temp_seq [ tid ];
+ 207         while(offset < output.length){
+ 208           temp = output [ tid ];
+ 209           if (tid >= offset) {
+ 210             temp = temp + output [ (tid - offset) ];
+ 211           }
+ 212           assert tid < offset ==> temp == output [ tid ];
+ 213           assert tid >= offset ==> temp == output [ tid ] + output [ (tid - offset) ];
+ 214           barrier(Threads) {
+ 215             requires tid >= 0 && tid < output.length;
+ 216             requires (offset >= 1 && offset < output.length);
+ 217             requires Perm( output [ tid ] , read );
+ 218             requires (tid >= offset ==> Perm( output [ (tid - offset) ] , read ));
+ 219             requires (tid >= offset ==> temp == output [ tid ] + output [ (tid - offset) ]);
+ 220             ensures tid >= 0 && tid < output.length;
+ 221             ensures (offset >= 1 && offset < output.length);
+ 222             ensures Perm( output [ tid ] , write );
+ 223           }
+ 224           if (tid >= offset) {
+ 225             output [ tid ] = temp;
+ 226           }
+ 227           temp_seq = partial_prefixsum(out,0,offset * 2);
+ 228           assert temp_seq [ tid ] == intsum(Take(out,tid + 1)) - intsum(Take(out,tid + 1 - offset * 2));
+ 229           assert tid < offset ==> temp_seq [ tid ] == intsum(Take(out,tid + 1));
+ 230           assert tid < offset ==> temp_seq [ tid ] == get(psum2(out),tid);
+ 231           assert temp_seq [ tid ] == get(partial_prefixsum(out,0,offset * 2),tid);
+ 232           assert tid < offset ==> output [ tid ] == temp_seq [ tid ];
+ 233           barrier(Threads) {
+ 234             requires tid >= 0 && tid < output.length;
+ 235             requires (offset >= 1 && offset < output.length);
+ 236             requires Perm( output [ tid ] , write );
+ 237             ensures tid >= 0 && tid < output.length;
+ 238             ensures (offset >= 1 && offset < output.length);
+ 239             ensures Perm( output [ tid ] , read );
+ 240             ensures (tid >= offset * 2 ==> Perm( output [ (tid - offset * 2) ] , read ));
+ 241           }
+ 242           offset = offset * 2;
+ 243         }
+     ---------]
+ 244         assert temp_seq [ tid ] == get(psum2(out),tid);
+ 245         assert output [ tid ] == temp_seq [ tid ];
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/PrefixSumKoggeStone/bad_Kogge-Stone.pvl ===
+ 194         lemma_intsum_Take(temp_seq,tid);
+ 195         assert tid < offset ==> output [ tid ] == temp_seq [ tid ];
+            [----------------------------
+ 196         gpuopt loop_unroll offset 1;
+ 197         loop_invariant offset >= 1;
+ 198         loop_invariant (| temp_seq |) == (| out |);
+ 199         loop_invariant offset < 2 * output.length;
+ 200         loop_invariant Perm( output [ tid ] , read );
+ 201         loop_invariant tid >= offset ==> Perm( output [ (tid - offset) ] , read );
+ 202         loop_invariant temp_seq [ tid ] == intsum(Take(out,tid + 1)) - intsum(Take(out,tid + 1 - offset));
+ 203         loop_invariant tid < offset ==> temp_seq [ tid ] == intsum(Take(out,tid + 1));
+ 204         loop_invariant tid < offset ==> temp_seq [ tid ] == get(psum2(out),tid);
+ 205         loop_invariant temp_seq [ tid ] == get(partial_prefixsum(out,0,offset),tid);
+ 206         loop_invariant tid < offset ==> output [ tid ] == temp_seq [ tid ];
+ 207         while(offset < output.length){
+ 208           temp = output [ tid ];
+ 209           if (tid >= offset) {
+ 210             temp = temp + output [ (tid - offset) ];
+ 211           }
+ 212           assert tid < offset ==> temp == output [ tid ];
+ 213           assert tid >= offset ==> temp == output [ tid ] + output [ (tid - offset) ];
+ 214           barrier(Threads) {
+ 215             requires tid >= 0 && tid < output.length;
+ 216             requires (offset >= 1 && offset < output.length);
+ 217             requires Perm( output [ tid ] , read );
+ 218             requires (tid >= offset ==> Perm( output [ (tid - offset) ] , read ));
+ 219             requires (tid >= offset ==> temp == output [ tid ] + output [ (tid - offset) ]);
+ 220             ensures tid >= 0 && tid < output.length;
+ 221             ensures (offset >= 1 && offset < output.length);
+ 222             ensures Perm( output [ tid ] , write );
+ 223           }
+ 224           if (tid >= offset) {
+ 225             output [ tid ] = temp;
+ 226           }
+ 227           temp_seq = partial_prefixsum(out,0,offset * 2);
+ 228           assert temp_seq [ tid ] == intsum(Take(out,tid + 1)) - intsum(Take(out,tid + 1 - offset * 2));
+ 229           assert tid < offset ==> temp_seq [ tid ] == intsum(Take(out,tid + 1));
+ 230           assert tid < offset ==> temp_seq [ tid ] == get(psum2(out),tid);
+ 231           assert temp_seq [ tid ] == get(partial_prefixsum(out,0,offset * 2),tid);
+ 232           assert tid < offset ==> output [ tid ] == temp_seq [ tid ];
+ 233           barrier(Threads) {
+ 234             requires tid >= 0 && tid < output.length;
+ 235             requires (offset >= 1 && offset < output.length);
+ 236             requires Perm( output [ tid ] , write );
+ 237             ensures tid >= 0 && tid < output.length;
+ 238             ensures (offset >= 1 && offset < output.length);
+ 239             ensures Perm( output [ tid ] , read );
+ 240             ensures (tid >= offset * 2 ==> Perm( output [ (tid - offset * 2) ] , read ));
+ 241           }
+ 242           offset = offset * 2;
+ 243         }
+     ---------]
+ 244         assert temp_seq [ tid ] == get(psum2(out),tid);
+ 245         assert output [ tid ] == temp_seq [ tid ];
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 51963 ms
+The final verdict is Fail
+[progress] entire run took 159663 ms

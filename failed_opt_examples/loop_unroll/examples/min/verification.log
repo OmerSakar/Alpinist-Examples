@@ -1,0 +1,42 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/examples/min/bad_loop_unroll_min.pvl
+[progress] parsing pass took 2960ms
+[progress] AST conversion pass took 150ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/examples/min/bad_loop_unroll_min.pvl successfully
+[progress] Parsed 1 file(s) in: 3180ms
+[progress] [04%] splitCompositeDeclarations took 0 ms
+[progress] [08%] loadExternalClasses took 0 ms
+[progress] [13%] standardize took 0 ms
+[progress] [17%] specifyImplicitLoopLabels took 0 ms
+[progress] [21%] propagateAbstractMethodContracts took 0 ms
+[progress] [26%] arrayNullValuesToNone took 0 ms
+[progress] [30%] addRequirementSatCheck took 0 ms
+[progress] [34%] checkAssignInPar took 0 ms
+[progress] [39%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 890ms
+[progress] AST conversion took 20ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 150ms
+[progress] AST conversion took 20ms
+[progress] [43%] simplify took 1340 ms
+[progress] first parsing pass took 10ms
+[progress] AST conversion took 10ms
+[progress] [47%] optimizeForSilver took 30 ms
+[progress] [52%] desugarArrayOps took 0 ms
+[progress] [56%] flattenNestedExpressions took 0 ms
+[progress] [60%] encodeInheritanceToDomain took 0 ms
+[progress] [65%] importADTsAndRefEncode took 10890 ms
+[progress] [69%] returnTypeToOutParameter took 0 ms
+[progress] [73%] reduceQuantifierNesting took 0 ms
+[progress] [78%] inlinePatternsToTriggers took 0 ms
+[progress] [82%] generateQuantifierTriggers took 0 ms
+[progress] [86%] scaleAllPredicateApplications took 50 ms
+[progress] [91%] collectInnerDeclarations took 0 ms
+[progress] [95%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 0ms
+Success!
+[progress] task Viper verification took 40241 ms
+[progress] [100%] applySilicon took 2800 ms
+The final verdict is Pass
+[progress] entire run took 109540 ms

@@ -1,0 +1,44 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/examples/mul/bad_loop_unroll_mul.pvl
+[progress] parsing pass took 2810ms
+[progress] AST conversion pass took 120ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/examples/mul/bad_loop_unroll_mul.pvl successfully
+[progress] Parsed 1 file(s) in: 2950ms
+[progress] [04%] splitCompositeDeclarations took 10 ms
+[progress] [08%] loadExternalClasses took 10 ms
+[progress] [12%] standardize took 0 ms
+[progress] [16%] specifyImplicitLoopLabels took 10 ms
+[progress] [20%] propagateAbstractMethodContracts took 10 ms
+[progress] [24%] arrayNullValuesToNone took 0 ms
+[progress] [28%] addRequirementSatCheck took 0 ms
+[progress] [32%] desugarADTOperators took 10 ms
+[progress] [36%] checkAssignInPar took 0 ms
+[progress] [40%] propagateInvariants took 10 ms
+[progress] [44%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 440ms
+[progress] AST conversion took 50ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 60ms
+[progress] AST conversion took 10ms
+[progress] [48%] simplify took 780 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 10ms
+[progress] [52%] optimizeForSilver took 20 ms
+[progress] [56%] desugarArrayOps took 20 ms
+[progress] [60%] flattenNestedExpressions took 10 ms
+[progress] [64%] encodeInheritanceToDomain took 10 ms
+[progress] [68%] importADTsAndRefEncode took 1670 ms
+[progress] [72%] returnTypeToOutParameter took 10 ms
+[progress] [76%] reduceQuantifierNesting took 10 ms
+[progress] [80%] inlinePatternsToTriggers took 10 ms
+[progress] [84%] generateQuantifierTriggers took 20 ms
+[progress] [88%] scaleAllPredicateApplications took 0 ms
+[progress] [92%] collectInnerDeclarations took 10 ms
+[progress] [96%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 30ms
+Success!
+[progress] task Viper verification took 6354 ms
+[progress] [100%] applySilicon took 500 ms
+The final verdict is Pass
+[progress] entire run took 24141 ms

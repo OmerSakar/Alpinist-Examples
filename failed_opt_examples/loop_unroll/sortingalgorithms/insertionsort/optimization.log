@@ -1,0 +1,135 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/insertionsort/bad_insertion.pvl
+[progress] parsing pass took 9190ms
+[progress] AST conversion pass took 210ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/insertionsort/bad_insertion.pvl successfully
+[progress] Parsed 1 file(s) in: 9410ms
+[progress] [03%] splitCompositeDeclarations took 10 ms
+[progress] [06%] checkTypesJava took 60 ms
+[progress] [10%] unrollLoops took 60 ms
+[progress] [13%] checkTypesJava took 30 ms
+[progress] [16%] splitCompositeDeclarations took 20 ms
+[progress] [20%] loadExternalClasses took 10 ms
+[progress] [23%] standardize took 10 ms
+[progress] [26%] specifyImplicitLoopLabels took 10 ms
+[progress] [30%] propagateAbstractMethodContracts took 20 ms
+[progress] [33%] arrayNullValuesToNone took 10 ms
+[progress] [36%] finalizeArguments took 10 ms
+[progress] [40%] addRequirementSatCheck took 50 ms
+[progress] [43%] checkAssignInPar took 10 ms
+[progress] [46%] propagateInvariants took 10 ms
+[progress] [50%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 520ms
+[progress] AST conversion took 40ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 70ms
+[progress] AST conversion took 0ms
+[progress] [53%] simplify took 1290 ms
+[progress] first parsing pass took 0ms
+[progress] AST conversion took 10ms
+[progress] [56%] optimizeForSilver took 30 ms
+[progress] [60%] desugarArrayOps took 10 ms
+[progress] [63%] flattenNestedExpressions took 10 ms
+[progress] [66%] encodeInheritanceToDomain took 30 ms
+[progress] [70%] importADTsAndRefEncode took 2150 ms
+[progress] [73%] returnTypeToOutParameter took 40 ms
+[progress] [76%] reduceQuantifierNesting took 10 ms
+[progress] [80%] inlinePatternsToTriggers took 20 ms
+[progress] [83%] generateQuantifierTriggers took 40 ms
+[progress] [86%] scaleAllPredicateApplications took 20 ms
+[progress] [90%] collectInnerDeclarations took 70 ms
+[progress] [93%] collectDeclarations took 10 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 50ms
+Errors! (1)
+=== Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/insertionsort/bad_insertion.pvl ===
+ 183     int temp;
+ 184     assert inp_seq_all [ 0 ] == inp_seq_cur;
+        [-------------------------------
+ 185     gpuopt loop_unroll outerLoop 1;
+ 186     loop_invariant outerLoop >= 1;
+ 187     loop_invariant outerLoop <= size;
+ 188     loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 189     loop_invariant (| inp_seq_all |) == outerLoop;
+ 190     loop_invariant (\forall int i;0 <= i && i < outerLoop;(| inp_seq_all [ i ] |) == size);
+ 191     loop_invariant (| inp_seq_cur |) == size;
+ 192     loop_invariant (\forall int i;0 <= i && i < size;(inp_seq_all [ (outerLoop - 1) ]) [ i ] == inp_seq_cur [ i ]);
+ 193     loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 194     loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 195     while(outerLoop < size){
+ 196       innerLoop = outerLoop;
+ 197       loop_invariant outerLoop >= 1;
+ 198       loop_invariant outerLoop < size;
+ 199       loop_invariant innerLoop >= 0;
+ 200       loop_invariant innerLoop <= outerLoop;
+ 201       loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 202       loop_invariant (| inp_seq_all |) == outerLoop;
+ 203       loop_invariant (\forall int i;0 <= i && i < outerLoop;(| inp_seq_all [ i ] |) == size);
+ 204       loop_invariant (| inp_seq_cur |) == size;
+ 205       loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 206       loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 207       while(innerLoop > 0 && input [ (innerLoop - 1) ] > input [ innerLoop ]){
+ 208         lemma_permutation_apply(inp_seq_all [ 0 ],inp_seq_cur,swap(inp_seq_cur,innerLoop - 1,innerLoop,0),innerLoop - 1,innerLoop);
+ 209         temp = input [ (innerLoop - 1) ];
+ 210         input [ (innerLoop - 1) ] = input [ innerLoop ];
+ 211         inp_seq_cur = inp_seq_cur [ innerLoop - 1 -> input [ innerLoop ] ];
+ 212         input [ innerLoop ] = temp;
+ 213         inp_seq_cur = inp_seq_cur [ innerLoop -> temp ];
+ 214         innerLoop = innerLoop - 1;
+ 215       }
+ 216       outerLoop = outerLoop + 1;
+ 217       inp_seq_all = inp_seq_all + seq<seq<int>>{inp_seq_cur};
+ 218     }
+     -----]
+ 219     assert (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 220   }
+-----------------------------------------
+  AssertFailed:AssertionFalse
+=========================================
+=== Alpinist-Examples-Bad/loop_unroll/sortingalgorithms/insertionsort/bad_insertion.pvl ===
+ 183     int temp;
+ 184     assert inp_seq_all [ 0 ] == inp_seq_cur;
+        [-------------------------------
+ 185     gpuopt loop_unroll outerLoop 1;
+ 186     loop_invariant outerLoop >= 1;
+ 187     loop_invariant outerLoop <= size;
+ 188     loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 189     loop_invariant (| inp_seq_all |) == outerLoop;
+ 190     loop_invariant (\forall int i;0 <= i && i < outerLoop;(| inp_seq_all [ i ] |) == size);
+ 191     loop_invariant (| inp_seq_cur |) == size;
+ 192     loop_invariant (\forall int i;0 <= i && i < size;(inp_seq_all [ (outerLoop - 1) ]) [ i ] == inp_seq_cur [ i ]);
+ 193     loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 194     loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 195     while(outerLoop < size){
+ 196       innerLoop = outerLoop;
+ 197       loop_invariant outerLoop >= 1;
+ 198       loop_invariant outerLoop < size;
+ 199       loop_invariant innerLoop >= 0;
+ 200       loop_invariant innerLoop <= outerLoop;
+ 201       loop_invariant (\forall* int i;i >= 0 && i < size;Perm( input [ i ] , write ));
+ 202       loop_invariant (| inp_seq_all |) == outerLoop;
+ 203       loop_invariant (\forall int i;0 <= i && i < outerLoop;(| inp_seq_all [ i ] |) == size);
+ 204       loop_invariant (| inp_seq_cur |) == size;
+ 205       loop_invariant (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 206       loop_invariant isApermutation(inp_seq_all [ 0 ],inp_seq_cur);
+ 207       while(innerLoop > 0 && input [ (innerLoop - 1) ] > input [ innerLoop ]){
+ 208         lemma_permutation_apply(inp_seq_all [ 0 ],inp_seq_cur,swap(inp_seq_cur,innerLoop - 1,innerLoop,0),innerLoop - 1,innerLoop);
+ 209         temp = input [ (innerLoop - 1) ];
+ 210         input [ (innerLoop - 1) ] = input [ innerLoop ];
+ 211         inp_seq_cur = inp_seq_cur [ innerLoop - 1 -> input [ innerLoop ] ];
+ 212         input [ innerLoop ] = temp;
+ 213         inp_seq_cur = inp_seq_cur [ innerLoop -> temp ];
+ 214         innerLoop = innerLoop - 1;
+ 215       }
+ 216       outerLoop = outerLoop + 1;
+ 217       inp_seq_all = inp_seq_all + seq<seq<int>>{inp_seq_cur};
+ 218     }
+     -----]
+ 219     assert (\forall int i;0 <= i && i < size;input [ i ] == inp_seq_cur [ i ]);
+ 220   }
+-----------------------------------------
+  caused by
+=========================================
+[progress] task Viper verification took 12487 ms
+The final verdict is Fail
+[progress] entire run took 58287 ms

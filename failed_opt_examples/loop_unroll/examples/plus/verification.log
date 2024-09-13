@@ -1,0 +1,42 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/examples/plus/bad_loop_unroll_plus.pvl
+[progress] parsing pass took 0ms
+[progress] AST conversion pass took 0ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/examples/plus/bad_loop_unroll_plus.pvl successfully
+[progress] Parsed 1 file(s) in: 0ms
+[progress] [04%] splitCompositeDeclarations took 0 ms
+[progress] [08%] loadExternalClasses took 0 ms
+[progress] [13%] specifyImplicitLoopLabels took 0 ms
+[progress] [17%] propagateAbstractMethodContracts took 0 ms
+[progress] [21%] arrayNullValuesToNone took 0 ms
+[progress] [26%] addRequirementSatCheck took 0 ms
+[progress] [30%] checkAssignInPar took 0 ms
+[progress] [34%] propagateInvariants took 0 ms
+[progress] [39%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 340ms
+[progress] AST conversion took 280ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 420ms
+[progress] AST conversion took 70ms
+[progress] [43%] simplify took 2890 ms
+[progress] first parsing pass took 70ms
+[progress] AST conversion took 0ms
+[progress] [47%] optimizeForSilver took 70 ms
+[progress] [52%] desugarArrayOps took 0 ms
+[progress] [56%] flattenNestedExpressions took 0 ms
+[progress] [60%] encodeInheritanceToDomain took 0 ms
+[progress] [65%] importADTsAndRefEncode took 8340 ms
+[progress] [69%] returnTypeToOutParameter took 0 ms
+[progress] [73%] reduceQuantifierNesting took 0 ms
+[progress] [78%] inlinePatternsToTriggers took 0 ms
+[progress] [82%] generateQuantifierTriggers took 0 ms
+[progress] [86%] scaleAllPredicateApplications took 0 ms
+[progress] [91%] collectInnerDeclarations took 20 ms
+[progress] [95%] collectDeclarations took 0 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 70ms
+Success!
+[progress] task Viper verification took 57208 ms
+[progress] [100%] applySilicon took 340 ms
+The final verdict is Pass
+[progress] entire run took 134456 ms

@@ -1,0 +1,42 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/loop_unroll/sequences/BubbleSort/bad_bubble-sort.pvl
+[progress] parsing pass took 4210ms
+[progress] AST conversion pass took 150ms
+[progress] Read Alpinist-Examples-Bad/loop_unroll/sequences/BubbleSort/bad_bubble-sort.pvl successfully
+[progress] Parsed 1 file(s) in: 4390ms
+[progress] [04%] splitCompositeDeclarations took 10 ms
+[progress] [08%] loadExternalClasses took 10 ms
+[progress] [13%] specifyImplicitLoopLabels took 10 ms
+[progress] [17%] propagateAbstractMethodContracts took 10 ms
+[progress] [21%] arrayNullValuesToNone took 0 ms
+[progress] [26%] addRequirementSatCheck took 0 ms
+[progress] [30%] desugarADTOperators took 10 ms
+[progress] [34%] checkAssignInPar took 0 ms
+[progress] [39%] dummy-InvariantsPropagatedHere took 0 ms
+[progress] first parsing pass took 480ms
+[progress] AST conversion took 50ms
+Could not find file: /usr/share/vercors/res/config/java/lang/Object.java
+[progress] first parsing pass took 70ms
+[progress] AST conversion took 10ms
+[progress] [43%] simplify took 900 ms
+[progress] first parsing pass took 10ms
+[progress] AST conversion took 10ms
+[progress] [47%] optimizeForSilver took 20 ms
+[progress] [52%] desugarArrayOps took 10 ms
+[progress] [56%] flattenNestedExpressions took 0 ms
+[progress] [60%] encodeInheritanceToDomain took 0 ms
+[progress] [65%] importADTsAndRefEncode took 10 ms
+[progress] [69%] returnTypeToOutParameter took 10 ms
+[progress] [73%] reduceQuantifierNesting took 20 ms
+[progress] [78%] inlinePatternsToTriggers took 10 ms
+[progress] [82%] generateQuantifierTriggers took 10 ms
+[progress] [86%] scaleAllPredicateApplications took 0 ms
+[progress] [91%] collectInnerDeclarations took 10 ms
+[progress] [95%] collectDeclarations took 10 ms
+[progress] verifying with builtin silicon backend
+[progress] conversion took 130ms
+Success!
+[progress] task Viper verification took 15385 ms
+[progress] [100%] applySilicon took 2010 ms
+The final verdict is Pass
+[progress] entire run took 32436 ms

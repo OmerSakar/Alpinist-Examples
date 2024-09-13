@@ -1,0 +1,11 @@
+[progress] parsing inputs...
+[progress] Parsing pvl file Alpinist-Examples-Bad/tiling/basic/SatCheck-Check/bad_satcheck-check.pvl
+[progress] parsing pass took 4870ms
+[progress] AST conversion pass took 10ms
+[progress] Read Alpinist-Examples-Bad/tiling/basic/SatCheck-Check/bad_satcheck-check.pvl successfully
+[progress] Parsed 1 file(s) in: 5430ms
+[progress] [20%] splitCompositeDeclarations took 0 ms
+[progress] [40%] checkTypesJava took 0 ms
+At file Alpinist-Examples-Bad/tiling/basic/SatCheck-Check/bad_satcheck-check.pvl from line 14 column 3 until line 52 column 3: The tile size 500 must be less than the upperbound 1 of tid
+The final verdict is Error
+[progress] entire run took 39293 ms
